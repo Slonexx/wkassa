@@ -3,6 +3,7 @@
 use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\Config\collectionOfPersonalController;
 use App\Http\Controllers\Config\DeleteVendorApiController;
+use App\Http\Controllers\Entity\widgetController;
 use App\Http\Controllers\initialization\indexController;
 use App\Http\Controllers\Setting\AccessController;
 use App\Http\Controllers\Setting\ChangeController;
@@ -35,6 +36,10 @@ Route::get('/kassa/MoneyOperation/{accountId}', [ChangeController::class, 'Money
 Route::get('/kassa/MoneyOperation/viewCash/{accountId}', [ChangeController::class, 'viewCash']);
 Route::get('/kassa/XReport/{accountId}', [ReportController::class, 'XReport']);
 Route::get('/kassa/ZReport/{accountId}', [ReportController::class, 'ZReport']);
+
+
+Route::get('/widget/{object}', [widgetController::class, 'widgetObject']);
+Route::get('/widget/Info/Attributes', [widgetController::class, 'widgetInfoAttributes']);
 
 
 
