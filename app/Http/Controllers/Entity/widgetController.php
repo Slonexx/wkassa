@@ -14,7 +14,7 @@ class widgetController extends Controller
 {
     public function widgetObject(Request $request, $object): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-
+        dd($object);
         try {
             $vendorAPI = new VendorApiController();
             $employee = $vendorAPI->context($request->contextKey);
