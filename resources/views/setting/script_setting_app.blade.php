@@ -12,11 +12,11 @@
             message.innerText = ''
             message.style.display = 'none'
 
-            let settings = ajax_settings(url + '/Setting/Create/AuthToken/'+ accountId, "GET", { email: email.value, password: password.value })
-            console.log(url + '/Setting/Create/AuthToken/'+ accountId + ' settings ↓ ')
+            let settings = ajax_settings(url + 'Setting/Create/AuthToken/'+ accountId, "GET", { email: email.value, password: password.value })
+            console.log(url + 'Setting/Create/AuthToken/'+ accountId + ' settings ↓ ')
             console.log(settings)
             $.ajax(settings).done(function (json) {
-                console.log(url + '/Setting/Create/AuthToken/' + accountId + ' response ↓ ')
+                console.log(url + 'Setting/Create/AuthToken/' + accountId + ' response ↓ ')
                 console.log(json)
 
                 if (json.status === 200) {
