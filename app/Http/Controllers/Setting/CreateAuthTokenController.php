@@ -61,12 +61,20 @@ class CreateAuthTokenController extends Controller
                 "Roundtype" => 2,
                 "ExtenalCheckNumber" => Str::uuid()
             ]);
-            if (property_exists(json_decode($body->getBody()->getContents()), 'Errors')){
+
+            $result = json_decode($body->getBody()->getContents());
+
+            if (property_exists($result, 'Errors')){
+                $message = "Неверный токен или Заводской номер кассы";
+                if ($result->Errors[0]->Text == "Продолжительность смены превышает 24 часа. Произведите закрытие смены.") {
+                    $message = $result->Errors[0]->Text;
+                }
+
                 return view('setting.authToken', [
                     'accountId' => $accountId,
                     'isAdmin' => $request->isAdmin,
 
-                    'message' => "Неверный токен или Заводской номер кассы",
+                    'message' => $message,
                     'CashboxUniqueNumber'=> $request->CashboxUniqueNumber,
                     'token' => $request->token,
                 ]);
