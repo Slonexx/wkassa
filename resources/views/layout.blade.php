@@ -6,7 +6,7 @@
            <div class="page headfull">
                 <div class="sidenav">
                     <div class="p-2 gradient_invert pb-3 ">
-                        <img style="margin-top: 0.5rem;" src="https://wkassa/webkassa_png.png" width="70%"  alt="">
+                        <img style="margin-top: 0.5rem;" src="https://smartwebkassa.kz/webkassa_png.png" width="70%"  alt="">
                     </div>
                     <br>
                     <a id="link_1" href="/{{$accountId}}?isAdmin={{ request()->isAdmin }}">Главная </a>
