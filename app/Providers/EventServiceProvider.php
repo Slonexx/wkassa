@@ -2,6 +2,15 @@
 
 namespace App\Providers;
 
+use App\Models\addSettingModel;
+use App\Models\documentModel;
+use App\Models\htmlResponce;
+use App\Models\XhtmlResponce;
+use App\Models\zHtmlResponce;
+use App\Observers\addSettingObserver;
+use App\Observers\htmlResponceObserver;
+use App\Observers\xHtmlResponceObserver;
+use App\Observers\zHtmlResponceObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -27,7 +36,11 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        parent::boot();
+        documentModel::observe(addSettingObserver::class);
+       /* htmlResponce::observe(htmlResponceObserver::class);
+        zHtmlResponce::observe(zHtmlResponceObserver::class);
+        XhtmlResponce::observe(xHtmlResponceObserver::class);*/
     }
 
     /**
