@@ -59,7 +59,7 @@ class CreateAuthTokenController extends Controller
                     ]
                 ],
                 "Roundtype" => 2,
-                "ExtenalCheckNumber" => Str::uuid()
+                "ExtenalCheckNumber" => Str::uuid()->toString(),
             ]);
 
             $result = json_decode($body->getBody()->getContents());

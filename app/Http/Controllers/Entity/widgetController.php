@@ -78,7 +78,7 @@ class widgetController extends Controller
 
         if (property_exists($body, 'attributes')){
             foreach ($body->attributes as $item){
-                if ($item->name == 'фискальный номер (Учёт.Касса)'){
+                if ($item->name == 'фискальный номер (WebKassa)'){
                     if ($item->value != null) $ticket_id = $item->value;
                     break;
                 }

@@ -36,9 +36,7 @@ class KassClient
         ]);
     }
 
-    /**
-     * @throws GuzzleException
-     */
+
     public function apiCashBoxes(): array
     {
         try {
@@ -107,6 +105,7 @@ class KassClient
 
     public function postCheck($body){
         $body["token"] = $this->Setting->authtoken;
+        $body["CashboxUniqueNumber"] = $this->Setting->CashboxUniqueNumber;
 
         $res = $this->client->post($this->URL_WEBKASSA['webkassa'].'api/Check',[
             'body' => json_encode($body),
@@ -116,24 +115,22 @@ class KassClient
     }
 
 
+    public function TicketPrint($ExternalCheckNumber){
 
-    /**
-     * @throws GuzzleException
-     */
-    public function GETClient($url){
-        $res = $this->client->get($url);
-        return json_decode($res->getBody());
-    }
-
-    /**
-     * @throws GuzzleException
-     */
-    public function POSTClient($url, $body){
-        $res = $this->client->post($url,[
-            'body' => json_encode($body),
+        $res = $this->client->post($this->URL_WEBKASSA['webkassa'].'api/Ticket/PrintFormat',[
+            'body' => json_encode(
+                [
+                    "token" => $this->Setting->authtoken,
+                    "CashboxUniqueNumber" => $this->Setting->CashboxUniqueNumber,
+                    "isDuplicate" => false,
+                    "paperKind" => 0,
+                    "ExternalCheckNumber" => $ExternalCheckNumber,
+                ]
+            ),
         ]);
 
-        return json_decode($res->getBody());
+        return json_decode($res->getBody()->getContents());
+
     }
 
 }

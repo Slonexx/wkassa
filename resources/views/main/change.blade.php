@@ -159,17 +159,6 @@
             })
         }
 
-
-        /*if (json.status == true){
-                            window.document.getElementById('is_activated').innerText = 'Активна'
-                            window.document.getElementById('is_activated').classList.add('bg-success')
-                            window.document.getElementById('is_activated').classList.add('text-white')
-                        } else  {
-                            window.document.getElementById('is_activated').classList.add('bg-danger')
-                            window.document.getElementById('is_activated').innerText = "Смена закрыта"
-                        }*/
-
-
         function saveValCash(){
             let url = "{{ Config::get("Global")['url'] }}" + "kassa/MoneyOperation/" +accountId
             let data = {
