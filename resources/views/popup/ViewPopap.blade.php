@@ -155,7 +155,7 @@
     <script>
 
         const url = "{{Config::get("Global")['url']}}" + 'Popup/'
-        const Entity = "{{$Entity}}"
+        let Entity = ""
 
         let object_Id = ''
         let accountId = ''
@@ -188,6 +188,7 @@
             object_Id = receivedMessage.popupParameters.object_Id;
             accountId = receivedMessage.popupParameters.accountId;
             entity_type = receivedMessage.popupParameters.entity_type;
+            Entity = receivedMessage.popupParameters.entity_type;
 
             let data = { object_Id: object_Id, accountId: accountId, };
 
