@@ -11,7 +11,7 @@
                 <div class="mx-2"> <img src="https://smartwebkassa.kz/webkassa_png.png" width="90%"  alt=""></div>
             </div>
             <div class="col-6 text-black " style="font-size: 22px; margin-top: 1.2rem !important;">
-                <span> Заказ покупателя № </span>
+                <span id="nameObjectHeader"> Заказ покупателя № </span>
                 <span id="numberOrder" class="text-black"></span>
             </div>
             <div class="col-3"></div>
@@ -155,7 +155,6 @@
     <script>
 
         const url = "{{Config::get("Global")['url']}}" + 'Popup/'
-        let Entity = ""
 
         let object_Id = ''
         let accountId = ''
@@ -188,16 +187,27 @@
             object_Id = receivedMessage.popupParameters.object_Id;
             accountId = receivedMessage.popupParameters.accountId;
             entity_type = receivedMessage.popupParameters.entity_type;
-            Entity = receivedMessage.popupParameters.entity_type;
+
+            if (entity_type === 'customerorder'){
+                window.document.getElementById('nameObjectHeader').innerText = "Заказ покупателя "
+            }
+            if (entity_type === 'salesreturn'){
+                window.document.getElementById('nameObjectHeader').innerText = "Возврат покупателя "
+            }
+            if (entity_type === 'demand'){
+                window.document.getElementById('nameObjectHeader').innerText = "Отгрузка "
+            }
+
+
 
             let data = { object_Id: object_Id, accountId: accountId, };
 
-            let settings = ajax_settings(url+Entity+"/show", "GET", data);
-            console.log(url+Entity+"/show" + ' settings ↓ ')
+            let settings = ajax_settings(url+entity_type+"/show", "GET", data);
+            console.log(url+entity_type+"/show" + ' settings ↓ ')
             console.log(settings)
 
             $.ajax(settings).done(function (json) {
-                console.log(url+Entity+"/show"  + ' response ↓ ')
+                console.log(url+entity_type+"/show"  + ' response ↓ ')
                 console.log(json)
 
                 if (json.statusCode === 500) {
@@ -257,7 +267,7 @@
             }
 
             if (total-0.01 <= money_card+money_cash){
-                let url = "{{Config::get("Global")['url']}}" + 'Popup/'+Entity+"/send"
+                let url = "{{Config::get("Global")['url']}}" + 'Popup/'+entity_type+"/send"
 
                 if (modalShowHide === 'show'){
                     $('#downL').modal('toggle')
