@@ -154,19 +154,19 @@ class TicketService
     private function getPayments($card, $cash, $mobile, $total): array
     {
         $result = null;
-        if ( $cash > 0 ) {
+        if ( $cash >= 0 ) {
             $result[] = [
                 'PaymentType' => 0,
                 'Sum' => (float) $cash,
             ];
         }
-        if ( $card > 0 ) {
+        if ( $card >= 0 ) {
             $result[] = [
                 'PaymentType' => 1,
                 'Sum' => (float) $card,
             ];
         }
-        if ( $mobile > 0 ) {
+        if ( $mobile >= 0 ) {
             $result[] = [
                 'PaymentType' => 4,
                 'Sum' => (float) $mobile,
@@ -181,75 +181,58 @@ class TicketService
         $result = ['Items' => null, "TicketModifiers" => null];
 
         foreach ($positions as $id => $item){
-            $TaxPercent = trim($item->is_nds, '%');
+            $TaxPercent = (float) trim($item->is_nds, '%');
             $discount = trim($item->discount, '%');
             if ($TaxPercent == 'без НДС' or $TaxPercent == "0%" or $TaxPercent == 0 or $TaxPercent == "0"){ $TaxPercent = 0; $TaxType = 0; } else $TaxType = 100;
             if ($discount > 0){ $discount = round(($item->price * $item->quantity * ($discount/100)), 2); }
-
-            $result['Items'][$id] = [
-                'Count' => (float) $item->quantity,
-                'Price' => (float) $item->price,
-
-                'TaxType' => $TaxType,
-                'TaxPercent' => (int) $TaxPercent,
-                'Tax' =>  round(($item->price * $item->quantity - $discount) / (($TaxPercent + 100) / 100) * ($TaxPercent / 100),2),
-
-
-                'PositionName' => (string) str_replace('+', ' ', $item->name),
-                'PositionCode' => $id,
-                'Discount' =>(float) $discount,
-                'UniCode' => (int) $item->UOM,
-            ];
-
-            /*if ( $discount > 0 ) {
-                $result['TicketModifiers'][0] = [
-                    'Sum' => $discount,
-                    'Text' => "Скидка на товары",
-                    'Type' => 1,
-                    'TaxPercent' => 0,
-                    'Tax' => 0,
-                    'TaxType' => 0,
-                ];
-            }*/
             if ($typeObject == 'demand'){
                 $demand =  $this->msClient->get('https://online.moysklad.ru/api/remap/1.2/entity/' . $typeObject . '/' . $idObject);
                 $demandPos =  $this->msClient->get($demand->positions->meta->href)->rows;
 
                 foreach ($demandPos as $item_2){
                     if ( $item->id == $item_2->id and isset($item_2->trackingCodes) ){
-                        array_pop($result);
                         foreach ($item_2->trackingCodes as $code){
-                                $result['Items'][] = [
-                                    'Count' => (float) $item->quantity,
-                                    'Price' => (float) $item->price,
+                            $result['Items'][] = [
+                                'Count' => 1,
+                                'Price' => (float) $item->price,
 
-                                    'TaxType' => $TaxType,//Налог в тенге РАССЧИТАТЬ!
-                                    'TaxPercent' => (int) $TaxPercent,
-                                    'Tax' => round(($item->price * $item->quantity * ($TaxPercent/100)), 2),
+                                'TaxType' => $TaxType,//Налог в тенге РАССЧИТАТЬ!
+                                'TaxPercent' => (int) $TaxPercent,
+                                'Tax' => round(($item->price * 1 - $discount) / (($TaxPercent + 100) / 100) * ($TaxPercent / 100),2),
 
 
-                                    'PositionName' => (string) $item->name,
-                                    'PositionCode' => $id,
-                                    'Discount' => $discount,
-                                    'UniCode' => (int) $item->UOM,
-                                    'Mark' =>(string) $code->cis,
-                                ];
-                            }
-
-                        if ( $discount > 0 ) {
-                            $result['TicketModifiers'][] = [
-                                'Sum' => $discount,
-                                'Text' => "Скидка",
-                                'Type' => 1,
-                                'TaxPercent' => $TaxPercent,
-                                'Tax' => round($discount * ($TaxPercent/100), 2),
-                                'TaxType' => $TaxType,
+                                'PositionName' => (string) $item->name,
+                                'PositionCode' => $id,
+                                'Discount' =>(float) $discount,
+                                'UniCode' => (int) $item->UOM,
+                                'Mark' =>(string) $code->cis,
                             ];
                         }
 
                     }
                 }
+            }
+            else {
+                $result['Items'][$id] = [
+                    'Count' => (float) $item->quantity,
+                    'Price' => (float) $item->price,
 
+                    'TaxType' => $TaxType,
+                    'TaxPercent' => (int) $TaxPercent,
+                    'Tax' =>  round(($item->price * $item->quantity - $discount) / (($TaxPercent + 100) / 100) * ($TaxPercent / 100),2),
+
+
+                    'PositionName' => (string) str_replace('+', ' ', $item->name),
+                    'PositionCode' => $id,
+                    'Discount' =>(float) $discount,
+                    'UniCode' => (int) $item->UOM,
+                ];
+            }
+
+
+
+            if (!isset($result['TicketModifiers'])) {
+                $result['TicketModifiers'] = null;
             }
         }
 
