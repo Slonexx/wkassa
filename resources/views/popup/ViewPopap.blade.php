@@ -1,6 +1,5 @@
 
 @extends('popup.index')
-
 @section('content')
 
 
@@ -8,8 +7,8 @@
 
     <div class="main-container">
         <div class="row gradient rounded p-2">
-            <div class="col-3">
-                <div class="mx-2"> <img src="https://ukassa.kz/_nuxt/img/d2b49fb.svg" width="90%"  alt=""></div>
+            <div class="col-2">
+                <div class="mx-2"> <img src="https://smartwebkassa.kz/webkassa_png.png" width="90%"  alt=""></div>
             </div>
             <div class="col-6 text-black " style="font-size: 22px; margin-top: 1.2rem !important;">
                 <span> Заказ покупателя № </span>
@@ -168,7 +167,7 @@
         let products_length = ''
 
 
-        let receivedMessage = {
+        /*let receivedMessage = {
             "name":"OpenPopup",
             "messageId":1,
             "popupName":"fiscalizationPopup",
@@ -178,10 +177,10 @@
                     "accountId":"1dd5bd55-d141-11ec-0a80-055600047495",
                     "entity_type":"customerorder",
                 }
-        };
+        };*/
 
-        //window.addEventListener("message", function(event) {
-        //let receivedMessage = event.data
+        window.addEventListener("message", function(event) {
+        let receivedMessage = event.data
 
         newPopup()
 
@@ -233,7 +232,7 @@
 
             })
         }
-        // });
+         });
 
 
 
