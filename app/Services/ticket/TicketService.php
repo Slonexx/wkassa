@@ -102,14 +102,19 @@ class TicketService
         $operation = $this->getOperation($payType);
         $Change = ($money_card + $money_cash + $money_mobile) - $total;
 
-        $payments = $this->getPayments($money_card, $money_cash, $money_mobile, $total);
+        $paymentsAll = $this->getPayments($money_card, $money_cash, $money_mobile, $total);
         $items = $this->getItems($positions, $id_entity, $entity_type);
         $customer = $this->getCustomer($id_entity, $entity_type);
 
         if ($operation == '') return ['Status' => false, 'Message' => 'не выбран тип продажи'];
         if ($Change < 0) return ['Status' => false, 'Message' => 'Сдача не может быть отрицательной, проверьте сумму'];
-        if ($payments == null) return ['Status' => false, 'Message' => 'Не были введены суммы !'];
+        if ($paymentsAll == null) return ['Status' => false, 'Message' => 'Не были введены суммы !'];
+        foreach ($paymentsAll as $item){
+            if ($item['Sum'] > 0) {
+                $payments[] = $item;
+            }
 
+        }
 
         $result = [
             'OperationType' => (int) $operation,
