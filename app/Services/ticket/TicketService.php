@@ -63,7 +63,13 @@ class TicketService
 
         try {
             $postTicket = $this->kassClient->postCheck($Body);
-
+            if (property_exists($postTicket, 'Errors')){
+                return response()->json([
+                    'status'    => 'error',
+                    'code'      => 500,
+                    'errors'    => $postTicket->Errors[0]->Text
+                ]);
+            }
             $putBody = $this->putBodyMS($entity_type, $Body, $postTicket, $oldBody, $positions);
             $put =  $this->msClient->put('https://online.moysklad.ru/api/remap/1.2/entity/'.$entity_type.'/'.$id_entity, $putBody);
 
@@ -113,7 +119,6 @@ class TicketService
             if ($item['Sum'] > 0) {
                 $payments[] = $item;
             }
-
         }
 
         $result = [
