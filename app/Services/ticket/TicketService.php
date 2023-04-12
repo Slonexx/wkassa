@@ -67,11 +67,11 @@ class TicketService
             if (property_exists($postTicket, 'Errors')){
                 if ($postTicket->Errors[0]->Text == "Срок действия сессии истек") {
                     $message = "Токен приложение недействителен, пожалуйста пройдите настройку заново";
-                }
+                } else $message = $postTicket->Errors[0]->Text;
                 return response()->json([
                     'status'    => 'error',
                     'code'      => 500,
-                    'errors'    => $postTicket->Errors[0]->Text
+                    'errors'    => $message
                 ]);
             }
             $putBody = $this->putBodyMS($entity_type, $Body, $postTicket, $oldBody, $positions);
