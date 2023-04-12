@@ -83,7 +83,7 @@ class KassClient
             "token" => $this->Setting->authtoken,
             "CashboxUniqueNumber" => $CashboxUniqueNumber,
         ];
-        $res = $this->client->post($this->URL_WEBKASSA['webkassa'].'api/XReport',[
+        $res = $this->client->post($this->URL_WEBKASSA['webkassa'].'api/ZReport',[
             'body' => json_encode($body),
         ]);
 
