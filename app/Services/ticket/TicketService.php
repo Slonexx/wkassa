@@ -236,7 +236,7 @@ class TicketService
                     'PositionName' => (string) str_replace('+', ' ', $item->name),
                     'PositionCode' => $id,
                     'Discount' =>(float) $discount,
-                    'UniCode' => (int) $item->UOM,
+                    'UnitCode' => (int) $item->UOM,
                 ];
             }
 
