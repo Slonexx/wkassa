@@ -9,7 +9,8 @@ use Illuminate\Http\Request;
 
 class DocumentController extends Controller
 {
-    public function getDocument(Request $request, $accountId){
+    public function getDocument(Request $request, $accountId): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
         $isAdmin = $request->isAdmin;
 
         $SettingBD = new getMainSettingBD($accountId);
