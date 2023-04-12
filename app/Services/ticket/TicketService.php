@@ -63,7 +63,7 @@ class TicketService
 
         try {
             $postTicket = $this->kassClient->postCheck($Body);
-            dd($postTicket);
+            dd($postTicket,$Body);
             $putBody = $this->putBodyMS($entity_type, $Body, $postTicket, $oldBody, $positions);
             $put =  $this->msClient->put('https://online.moysklad.ru/api/remap/1.2/entity/'.$entity_type.'/'.$id_entity, $putBody);
 
@@ -117,7 +117,7 @@ class TicketService
             'TicketModifiers' => $items['TicketModifiers'],
             'Payments' => $payments,
             'Change' => $Change,
-            'RoundType' => 2,
+            'RoundType' => 0,
             'ExternalCheckNumber' => Str::uuid()->toString(),
             'CustomerEmail' => $customer['email'],
             'CustomerPhone' => $customer['phone'],
