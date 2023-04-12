@@ -65,6 +65,9 @@ class TicketService
         try {
             $postTicket = $this->kassClient->postCheck($Body);
             if (property_exists($postTicket, 'Errors')){
+                if ($postTicket->Errors[0]->Text == "Срок действия сессии истек") {
+                    $message = "Токен приложение недействителен, пожалуйста пройдите настройку заново";
+                }
                 return response()->json([
                     'status'    => 'error',
                     'code'      => 500,

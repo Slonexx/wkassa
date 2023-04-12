@@ -50,7 +50,7 @@ class CreateAuthTokenController extends Controller
                     "PositionName"=>"Проверка Токена и Заводского номера",
                     "Tax"=> 0,
                     "TaxType"=> 0,
-                    "UniCode"=> 796,
+                    "UnitCode"=> 796,
                 ]],
                 'Payments' => [
                     0 => [
@@ -76,7 +76,7 @@ class CreateAuthTokenController extends Controller
 
                     'message' => $message,
                     'CashboxUniqueNumber'=> $request->CashboxUniqueNumber,
-                    'token' => $request->token,
+                    'token' => "",
                 ]);
             }
 
