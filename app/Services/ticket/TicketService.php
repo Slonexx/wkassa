@@ -61,6 +61,7 @@ class TicketService
 
         if (isset($Body['Status'])) { return response()->json($Body['Message']); }
 
+        //dd($Body, json_encode($Body));
         try {
             $postTicket = $this->kassClient->postCheck($Body);
             if (property_exists($postTicket, 'Errors')){
@@ -214,7 +215,7 @@ class TicketService
                                 'PositionName' => (string) $item->name,
                                 'PositionCode' => $id,
                                 'Discount' =>(float) $discount,
-                                'UniCode' => (int) $item->UOM,
+                                'UnitCode' => (int) $item->UOM,
                                 'Mark' =>(string) $code->cis,
                             ];
                         }
