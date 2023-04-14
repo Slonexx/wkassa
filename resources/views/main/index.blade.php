@@ -5,7 +5,7 @@
         let url = "{{Config::get("Global")['url']}}";
         let accountId = '{{ $accountId }}'
     </script>
-    <div class="p-4 mx-1 mt-1 bg-white rounded py-3 main-container">
+    <div class="p-4 mx-1 mt-1 bg-white rounded py-3 main-container content-container">
         @if ( request()->isAdmin != null and request()->isAdmin != 'ALL' )
             <div class="mt-2 alert alert-danger alert-dismissible fade show in text-center "> Доступ к настройкам есть только у администратора
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -17,7 +17,7 @@
             </div>
             @include('div.TopServicePartner')
 
-            <div class="content-container">
+
 
                 <div class="row mt-3 ">
                     <div class="col-6">
@@ -91,11 +91,11 @@
                         <img style="width: 50px" src="https://cdn-ru.bitrix24.kz/b9797699/landing/a5d/a5d76d6870e8154035060f40b9848dca/Skoro_1x.png">
                         <div class=""> <strong>НОВЫЕ ВОЗМОЖНОСТИ</strong></div>
                         <div class="">
-                            Мы не стоим на месте, поэтому совсем скоро вы сможете оценить новые фишки в нашем приложении. Ну и будем признатальны за обратную связь.
+                            Мы не стоим на месте, поэтому совсем скоро вы сможете оценить новые фишки в нашем приложении. Ну и будем признательны за обратную связь.
                         </div>
                     </div>
                 </div>
-            </div>
+
 
 
 

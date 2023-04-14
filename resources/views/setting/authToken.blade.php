@@ -21,7 +21,7 @@
             <div class="mb-3 row">
                 <label for="CashboxUniqueNumber" class="col-3 col-form-label"> Заводской номер кассы </label>
                 <div class="col-9">
-                    <input id="CashboxUniqueNumber" type="text" name="CashboxUniqueNumber" placeholder="Заводской номер кассы в Webkassa. Находится в личном кабинете WebKassa, в информация о кассе" class="form-control form-control-orange"
+                    <input id="CashboxUniqueNumber" type="text" name="CashboxUniqueNumber" placeholder="Его можно получить в личном кабинете WebKassa, в информация о кассе" class="form-control form-control-orange"
                            required maxlength="255" value="{{ $CashboxUniqueNumber }}">
                 </div>
             </div>
