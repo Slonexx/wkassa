@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-3"></div>
             <div class="col-2"> <img src="https://smartwebkassa.kz/webkassa_png.png" width="100%" height="100%"  alt=""></div>
-            <span class="col-6 mt-2"> Данная интеграция находиться в МоемСкладе </span>
+            <span class="col-6 mt-2"> Данная интеграция находится в МоемСкладе </span>
         </div>
 </div>
 
