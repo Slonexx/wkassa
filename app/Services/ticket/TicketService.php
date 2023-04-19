@@ -284,14 +284,14 @@ class TicketService
 
         $attributes =  $this->msClient->get('https://online.moysklad.ru/api/remap/1.2/entity/'.$entity_type.'/metadata/attributes/')->rows;
         $positions =  $this->msClient->get($oldBody->positions->meta->href)->rows;
-
-        foreach ($oldBody->attributes as $item){
-            if ($item->name == 'Фискальный номер (WebKassa)' and $item->name != ''){
-                $check_attributes_in_value_name = false;
-                break;
-            } else $check_attributes_in_value_name = true;
-        }
-
+        if (property_exists($oldBody, 'attributes')) {
+            foreach ($oldBody->attributes as $item){
+                if ($item->name == 'Фискальный номер (Учёт.Касса)' and $item->name != ''){
+                    $check_attributes_in_value_name = false;
+                    break;
+                } else $check_attributes_in_value_name = true;
+            }
+        } else $check_attributes_in_value_name = true;
 
         $Result_attributes = $this->setAttributesToPutBody($Body, $postTicket, $check_attributes_in_value_name, $attributes);
         $result['description'] = $this->descriptionToCreate($oldBody, $postTicket, 'Продажа, Фискальный номер: ');
