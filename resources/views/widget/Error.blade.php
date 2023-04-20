@@ -40,6 +40,7 @@
         }
 
         window.addEventListener("message", function(event) {
+            console.log(event.data)
             const receivedMessage = event.data;
             let sendingMessage = {
                 name: "OpenFeedback",
