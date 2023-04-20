@@ -76,16 +76,16 @@ class widgetController extends Controller
                 'message' => json_decode($e->getResponse()->getBody()->getContents())->errors[0]->error,
             ] );
         }
-
+        $ClientWeb = new KassClient($accountId);
+        $Total = $ClientWeb->ShiftHistory(0, 50)->Data->Total;
+        $json = $ClientWeb->ShiftHistory($Total-1, $Total)->Data->Shifts[0];
+        if (property_exists($json, 'CloseDate')){
+            $Close = true;
+        } else $Close = false;
+        dd($json);
         try {
-            $ClientWeb = new KassClient($accountId);
-            $Total = $ClientWeb->ShiftHistory(0, 50)->Data->Total;
-            $json = $ClientWeb->ShiftHistory($Total-1, $Total)->Data->Shifts[0];
-            if (property_exists($json, 'CloseDate')){
-                $Close = true;
-            } else $Close = false;
+
         } catch (BadResponseException $e){
-            dd(json_decode($e->getResponse()->getBody()->getContents()));
             return view( 'widget.Error', [
                 'status' => false,
                 'code' => 400,
