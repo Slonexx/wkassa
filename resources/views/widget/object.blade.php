@@ -6,8 +6,8 @@
             <div class="col-6">
                 <div class="mx-2 text-center"> <img src="https://smartwebkassa.kz/webkassa_png.png" width="50%"   alt=""> </div>
             </div>
-            <div class="col-2 ">
-
+            <div class="col-6 ">
+                <div class="mx-2 mt-3 text-right" style="font-size: 10px"> Важно! После фискализации закрывайте документ без сохранения </div>
             </div>
         </div>
 
