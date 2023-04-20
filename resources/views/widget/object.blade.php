@@ -26,7 +26,7 @@
             </div>
             <div class="row mt-2">
                 <div class="col-1"> </div>
-                <button id="CloseChangeWebKassa" onclick="CloseChangeWebKassa()" class="col-9 btn p-1 btn-danger text-white rounded-pill" style="font-size: 14px">Закрыть смену</button>
+                {{--<button id="CloseChangeWebKassa" onclick="CloseChangeWebKassa()" class="col-9 btn p-1 btn-danger text-white rounded-pill" style="font-size: 14px">Закрыть смену</button>--}}
                 <div class="col-1"></div>
             </div>
         </div>
