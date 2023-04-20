@@ -73,7 +73,7 @@ class widgetController extends Controller
             return view( 'widget.Error', [
                 'status' => false,
                 'code' => 400,
-                'message' => json_decode($e->getResponse()->getBody()->getContents())->message,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->errors[0]->error,
             ] );
         }
 
@@ -85,6 +85,7 @@ class widgetController extends Controller
                 $Close = true;
             } else $Close = false;
         } catch (BadResponseException $e){
+            dd(json_decode($e->getResponse()->getBody()->getContents()));
             return view( 'widget.Error', [
                 'status' => false,
                 'code' => 400,
