@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Entity;
 
+use App\Clients\KassClient;
 use App\Clients\MsClient;
 use App\Http\Controllers\BD\getWorkerID;
 use App\Http\Controllers\Config\getSettingVendorController;
@@ -76,6 +77,21 @@ class widgetController extends Controller
             ] );
         }
 
+        try {
+            $ClientWeb = new KassClient($accountId);
+            $Total = $ClientWeb->ShiftHistory(0, 50)->Data->Total;
+            $json = $ClientWeb->ShiftHistory($Total-1, $Total)->Data->Shifts[0];
+            if (property_exists($json, 'CloseDate')){
+                $Close = true;
+            } else $Close = false;
+        } catch (BadResponseException $e){
+            return view( 'widget.Error', [
+                'status' => false,
+                'code' => 400,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message,
+            ] );
+        }
+
         if (property_exists($body, 'attributes')){
             foreach ($body->attributes as $item){
                 if ($item->name == 'фискальный номер (WebKassa)'){
@@ -84,7 +100,7 @@ class widgetController extends Controller
                 }
             }
         }
-        return response()->json(['ticket_id' => $ticket_id]);
+        return response()->json(['ticket_id' => $ticket_id, 'Close' => $Close]);
     }
 
 

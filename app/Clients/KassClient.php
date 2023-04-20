@@ -133,4 +133,19 @@ class KassClient
 
     }
 
+
+    public function ShiftHistory($skip, $Take){
+        $body = [
+            "token" => $this->Setting->authtoken,
+            "CashboxUniqueNumber" => $this->Setting->CashboxUniqueNumber,
+            "skip" => $skip,
+            "Take" => $Take,
+        ];
+        $res = $this->client->post($this->URL_WEBKASSA['webkassa'].'api/Cashbox/ShiftHistory',[
+            'body' => json_encode($body),
+        ]);
+
+        return json_decode($res->getBody()->getContents());
+    }
+
 }
