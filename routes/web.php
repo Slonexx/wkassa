@@ -6,6 +6,7 @@ use App\Http\Controllers\Config\DeleteVendorApiController;
 use App\Http\Controllers\Entity\PopapController;
 use App\Http\Controllers\Entity\PrintController;
 use App\Http\Controllers\Entity\widgetController;
+use App\Http\Controllers\errorSettingController;
 use App\Http\Controllers\initialization\indexController;
 use App\Http\Controllers\Setting\AccessController;
 use App\Http\Controllers\Setting\ChangeController;
@@ -38,7 +39,7 @@ Route::get('/kassa/MoneyOperation/{accountId}', [ChangeController::class, 'Money
 Route::get('/kassa/MoneyOperation/viewCash/{accountId}', [ChangeController::class, 'viewCash']);
 Route::get('/kassa/XReport/{accountId}', [ReportController::class, 'XReport']);
 Route::get('/kassa/ZReport/{accountId}', [ReportController::class, 'ZReport']);
-
+Route::get('/Setting/error/{accountId}', [errorSettingController::class, 'getError'])->name('errorSetting');
 
 Route::get('/widget/{object}', [widgetController::class, 'widgetObject']);
 Route::get('/widget/Info/Attributes', [widgetController::class, 'widgetInfoAttributes']);

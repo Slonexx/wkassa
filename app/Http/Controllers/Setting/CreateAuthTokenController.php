@@ -63,7 +63,7 @@ class CreateAuthTokenController extends Controller
             ]);
 
             $result = json_decode($body->getBody()->getContents());
-
+            dd($result);
             if (property_exists($result, 'Errors')){
                 $message = "Неверный токен или Заводской номер кассы";
                 if ($result->Errors[0]->Text == "Продолжительность смены превышает 24 часа. Произведите закрытие смены.") {
