@@ -69,9 +69,21 @@
         NAME_HEADER_TOP_SERVICE("Настройки → доступа")
 
         let row = @json($employee);
+        let workers = @json($workers);
 
         for (let index = 0; row.length > index; index++){
-            let value = '<div class="mx-1 row mt-2"> <div class="col-1 mx-3 mt-1">'+ index +'</div> <div class="col-5 mt-1"> ' + row[index].fullName + ' </div> <div class="col-5"> <select id="'+row[index].id+'" name="'+row[index].id+'" class="form-select text-black"> <option selected="" value="0">Запретить доступ </option> <option value="1">Предоставить доступ</option> </select> </div> </div>'
+            let value
+            if (workers !== ""){
+              if (workers[row[index].id] != undefined) {
+                  if (workers[row[index].id].access == 1) {
+                       value = '<div class="mx-1 row mt-2"> <div class="col-1 mx-3 mt-1">'+ index +'</div> <div class="col-5 mt-1"> ' + row[index].fullName + ' </div> <div class="col-5"> <select id="'+row[index].id+'" name="'+row[index].id+'" class="form-select text-black"> <option value="0">Запретить доступ </option> <option selected value="1">Предоставить доступ</option> </select> </div> </div>'
+                  } else  {
+                       value = '<div class="mx-1 row mt-2"> <div class="col-1 mx-3 mt-1">'+ index +'</div> <div class="col-5 mt-1"> ' + row[index].fullName + ' </div> <div class="col-5"> <select id="'+row[index].id+'" name="'+row[index].id+'" class="form-select text-black"> <option selected value="0">Запретить доступ </option> <option value="1">Предоставить доступ</option> </select> </div> </div>'
+                  }
+              } else  value = '<div class="mx-1 row mt-2"> <div class="col-1 mx-3 mt-1">'+ index +'</div> <div class="col-5 mt-1"> ' + row[index].fullName + ' </div> <div class="col-5"> <select id="'+row[index].id+'" name="'+row[index].id+'" class="form-select text-black"> <option selected value="0">Запретить доступ </option> <option value="1">Предоставить доступ</option> </select> </div> </div>'
+            } else value = '<div class="mx-1 row mt-2"> <div class="col-1 mx-3 mt-1">'+ index +'</div> <div class="col-5 mt-1"> ' + row[index].fullName + ' </div> <div class="col-5"> <select id="'+row[index].id+'" name="'+row[index].id+'" class="form-select text-black"> <option selected value="0">Запретить доступ </option> <option value="1">Предоставить доступ</option> </select> </div> </div>'
+
+
             $('#row').append(value)
         }
 
