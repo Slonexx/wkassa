@@ -78,7 +78,12 @@ class PopapController extends Controller
             if (property_exists($uom_body, 'uom')){
                 $propety_uom = true;
                 $uom = $Client->get($uom_body->uom->meta->href);
+                if (property_exists($uom, 'code' ) and property_exists($uom, 'name' )){
                 $uom = ['id' => $uom->code, 'name' => $uom->name];
+                } else {
+                    $propety_uom = false;
+                    $uom = ['id' => 796, 'name' => 'шт'];
+                }
             } else {
 
                 if (property_exists($uom_body, 'characteristics')){
