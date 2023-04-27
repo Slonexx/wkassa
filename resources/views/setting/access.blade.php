@@ -5,7 +5,7 @@
     <script>
 
     </script>
-    <div class="main-container">
+    <div class=" main-container content-container">
         <div class="content p-4 mt-2 bg-white text-Black rounded">
             @include('div.TopServicePartner')
             @include('div.alert')
@@ -23,7 +23,8 @@
                         <div class="col-5"> Фамилия сотрудника </div>
                         <div class="col-5 mx-2"> Выберите доступ </div>
                     </div>
-                    @foreach($employee as $id=>$item)
+                    <div id="row" class="row"></div>
+                    {{--@foreach($employee as $id=>$item)
                         @if($security[$item->id] != 'cashier')
                             <div class="mx-1 row mt-2">
                                 <div class="col-1 mx-3 mt-1">
@@ -52,7 +53,7 @@
                                 </div>
                             </div>
                         @endif
-                    @endforeach
+                    @endforeach--}}
                 </div>
 
                 <hr class="href_padding">
@@ -66,6 +67,16 @@
 
     <script>
         NAME_HEADER_TOP_SERVICE("Настройки → доступа")
+
+        let row = @json($employee);
+
+        for (let index = 0; row.length > index; index++){
+            let value = '<div class="mx-1 row mt-2"> <div class="col-1 mx-3 mt-1">'+ index +'</div> <div class="col-5 mt-1"> ' + row[index].fullName + ' </div> <div class="col-5"> <select id="'+row[index].id+'" name="'+row[index].id+'" class="form-select text-black"> <option selected="" value="0">Запретить доступ </option> <option value="1">Предоставить доступ</option> </select> </div> </div>'
+            $('#row').append(value)
+        }
+
+
+
     </script>
 
 @endsection
