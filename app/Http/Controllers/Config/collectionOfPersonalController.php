@@ -13,6 +13,14 @@ class collectionOfPersonalController extends Controller
 {
     public function getCollection(Request $request, $accountId): \Illuminate\Http\JsonResponse
     {
+
+        if ($accountId == "ba335056-17e5-11ed-0a80-0fa5000243e5") {
+            return response()->json([
+                'message' => ""
+            ]);
+        }
+
+
         $Setting = new getSettingVendorController($accountId);
         $getPersonal = new getPersonal($accountId);
 
