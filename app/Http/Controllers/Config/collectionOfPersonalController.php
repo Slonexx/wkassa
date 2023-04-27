@@ -20,11 +20,14 @@ class collectionOfPersonalController extends Controller
         $object= $ClientMS->get('https://online.moysklad.ru/api/remap/1.2/entity/employee')->rows;
         $email = null;
         $fullName = null;
+
         foreach ($object as $item){
-            if (mb_substr($item->uid, 0, 5) == 'admin') {
-                $email = $item->email;
-                $fullName = $item->fullName;
-            } else continue;
+            if (property_exists($item, 'uid')){
+                if (mb_substr($item->uid, 0, 5) == 'admin') {
+                    $email = $item->email;
+                    $fullName = $item->fullName;
+                } else continue;
+            }
         }
 
         if ($getPersonal->email == null){
