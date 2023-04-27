@@ -68,7 +68,6 @@ class CreateAuthTokenController extends Controller
                 if ($result->Errors[0]->Text == "Продолжительность смены превышает 24 часа. Произведите закрытие смены.") {
                     $message = $result->Errors[0]->Text;
                 }
-                dd($result);
                 return view('setting.authToken', [
                     'accountId' => $accountId,
                     'isAdmin' => $request->isAdmin,
