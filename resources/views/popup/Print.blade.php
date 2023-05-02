@@ -22,68 +22,70 @@
     let PrintForm = @json($PrintFormat);
     console.log(PrintForm);
     for (let index = 0; index < PrintForm.length -12 ; index++){
-        let value = '<div style="text-align: center">' + PrintForm[index].Value + "</div>"
-        if (index < 7 ){
-            if (PrintForm[index].Value === "------------------------------------------------") {
-                value = '<hr  style="border:1px dashed black; margin-top: 0.1rem !important; margin-bottom: 0.5rem;">'
+        if (index === 0) {}
+        else {
+            let value = '<div style="text-align: center">' + PrintForm[index].Value + "</div>"
+            if (index < 7 ){
+                if (PrintForm[index].Value === "------------------------------------------------") {
+                    value = '<hr  style="border:1px dashed black; margin-top: 0.1rem !important; margin-bottom: 0.5rem;">'
+                }
+                $('#main').append(value)
             }
-            $('#main').append(value)
-        }
 
-        if (index > 7 && index < 11){
-            value = '<div>' + PrintForm[index].Value + "</div>"
-            if (PrintForm[index].Value === "------------------------------------------------") {
-                value = '<hr  style="border:1px dashed black; margin-top: 0.1rem !important; margin-bottom: 0.5rem;">'
+            if (index > 7 && index < 11){
+                value = '<div>' + PrintForm[index].Value + "</div>"
+                if (PrintForm[index].Value === "------------------------------------------------") {
+                    value = '<hr  style="border:1px dashed black; margin-top: 0.1rem !important; margin-bottom: 0.5rem;">'
+                }
+                $('#main').append(value)
             }
-            $('#main').append(value)
-        }
-        if (index > 10){
-            if (PrintForm[index].Value === "------------------------------------------------") {
-                value = '<hr  style="border:1px dashed black; margin-top: 0.1rem !important; margin-bottom: 0.5rem;">'
-            } else{
-                let text = (PrintForm[index].Value).replace( / /g, "      " )
-                if (text.length > 110){
-                    console.log(PrintForm[index])
-                    console.log(text.length)
-                    if (PrintForm[index].Style === 1) {
-                        value =
-                            '<div style="white-space: normal">'
-                            + '<table role="presentation" style="width: 100%; ">'
-                            + '<tbody>'
-                            + '<tr style=" padding: 0;">'
-                            + '<td style="padding: 0;  text-align: left;" colspan="5">&nbsp;' + '<b>' + text.slice(0, 110) + '</td>'
-                            + '<td style="padding: 0;  text-align: right;" colspan="5">' + text.slice(110) + '</td>'
-                            + '</tr>'
-                            + '</tbody>'
-                            + '</table>'
-                            + '</div>'
-                    } else  {
-                        value =
-                            '<div style="white-space: normal">'
-                            + '<table role="presentation" style="width: 100%; ">'
-                            + '<tbody>'
-                            + '<tr style=" padding: 0;">'
-                            + '<td style="padding: 0;  text-align: left;" colspan="5">&nbsp;' + text.slice(0, 110) + '</td>'
-                            + '<td style="padding: 0;  text-align: right;" colspan="5">' + text.slice(110) + '</td>'
-                            + '</tr>'
-                            + '</tbody>'
-                            + '</table>'
-                            + '</div>'
+            if (index > 10){
+                if (PrintForm[index].Value === "------------------------------------------------") {
+                    value = '<hr  style="border:1px dashed black; margin-top: 0.1rem !important; margin-bottom: 0.5rem;">'
+                } else{
+                    let text = (PrintForm[index].Value).replace( / /g, "      " )
+                    if (text.length > 110){
+                        console.log(PrintForm[index])
+                        console.log(text.length)
+                        if (PrintForm[index].Style === 1) {
+                            value =
+                                '<div style="white-space: normal">'
+                                + '<table role="presentation" style="width: 100%; ">'
+                                + '<tbody>'
+                                + '<tr style=" padding: 0;">'
+                                + '<td style="padding: 0;  text-align: left;" colspan="5">&nbsp;' + '<b>' + text.slice(0, 110) + '</td>'
+                                + '<td style="padding: 0;  text-align: right;" colspan="5">' + text.slice(110) + '</td>'
+                                + '</tr>'
+                                + '</tbody>'
+                                + '</table>'
+                                + '</div>'
+                        } else  {
+                            value =
+                                '<div style="white-space: normal">'
+                                + '<table role="presentation" style="width: 100%; ">'
+                                + '<tbody>'
+                                + '<tr style=" padding: 0;">'
+                                + '<td style="padding: 0;  text-align: left;" colspan="5">&nbsp;' + text.slice(0, 110) + '</td>'
+                                + '<td style="padding: 0;  text-align: right;" colspan="5">' + text.slice(110) + '</td>'
+                                + '</tr>'
+                                + '</tbody>'
+                                + '</table>'
+                                + '</div>'
+                        }
+                    } else {
+                        let text = (PrintForm[index].Value).replace( / /g, "&nbsp;" )
+                        value = '<div style="white-space: normal">' + text + "</div>"
                     }
-                } else {
-                    let text = (PrintForm[index].Value).replace( / /g, "&nbsp;" )
-                    value = '<div style="white-space: normal">' + text + "</div>"
+
+
+
                 }
 
 
-
+                $('#main').append(value)
             }
 
-
-            $('#main').append(value)
         }
-
-
     }
 
     for (let index = PrintForm.length -12; index < PrintForm.length ; index++){
