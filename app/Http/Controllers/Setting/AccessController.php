@@ -30,7 +30,7 @@ class AccessController extends Controller
             ]);
         }
 
-        if ( array_key_exists(0, $Workers->access) ){ $Workers = null;
+        if ( array_key_exists(0, $Workers->access) ){ $Workers = '';
         } else $Workers = $Workers->access;
 
 
