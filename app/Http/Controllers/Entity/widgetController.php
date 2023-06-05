@@ -81,7 +81,7 @@ class widgetController extends Controller
             $ClientWeb = new KassClient($accountId);
             $Total = $ClientWeb->ShiftHistory(0, 50)->Data->Total;
             sleep(1);
-            $json = $ClientWeb->ShiftHistory($Total-1, $Total)->Data->Shifts[0];
+            $json = $ClientWeb->ShiftHistory($Total-1, 50)->Data->Shifts[0];
 
             if (property_exists($json, 'CloseDate')){
                 $Close = true;
@@ -132,7 +132,6 @@ class widgetController extends Controller
             $ClientWeb = new KassClient($accountId);
             $Total = $ClientWeb->ShiftHistory(0, 50)->Data->Total;
             sleep(1);
-            dd($ClientWeb->ShiftHistory($Total-1, 50));
             $json = $ClientWeb->ShiftHistory($Total-1, 50)->Data->Shifts[0];
 
             if (property_exists($json, 'CloseDate')){
