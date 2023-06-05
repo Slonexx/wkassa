@@ -107,7 +107,56 @@ class widgetController extends Controller
     }
 
 
+    public function LOG_widgetInfoAttributes(Request $request): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\Contracts\Foundation\Application
+    {
+        $ticket_id = null;
 
+        $accountId = $request->accountId;
+        $entity_type = $request->entity_type;
+        $objectId = $request->objectId;
+
+        $url = $this->getUrlEntity($entity_type, $objectId);
+        $Setting = new getSettingVendorController($accountId);
+        try {
+            $Client = new MsClient($Setting->TokenMoySklad);
+            $body = $Client->get($url);
+        } catch (BadResponseException $e){
+            return view( 'widget.Error', [
+                'status' => false,
+                'code' => 400,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->errors[0]->error,
+            ] );
+        }
+
+        try {
+            $ClientWeb = new KassClient($accountId);
+            $Total = $ClientWeb->ShiftHistory(0, 50)->Data->Total;
+            sleep(1);
+            dd($Total);
+            $json = $ClientWeb->ShiftHistory($Total-1, $Total)->Data->Shifts[0];
+
+            if (property_exists($json, 'CloseDate')){
+                $Close = true;
+            } else $Close = false;
+
+        } catch (BadResponseException $e){
+            return view( 'widget.Error', [
+                'status' => false,
+                'code' => 400,
+                'message' => json_decode($e->getResponse()->getBody()->getContents())->message,
+            ] );
+        }
+
+        if (property_exists($body, 'attributes')){
+            foreach ($body->attributes as $item){
+                if ($item->name == 'фискальный номер (WebKassa)'){
+                    if ($item->value != null) $ticket_id = $item->value;
+                    break;
+                }
+            }
+        }
+        return response()->json(['ticket_id' => $ticket_id, 'Close' => $Close]);
+    }
 
 
     private function getUrlEntity($enType,$enId): ?string

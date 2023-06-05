@@ -43,6 +43,7 @@ Route::get('/Setting/error/{accountId}', [errorSettingController::class, 'getErr
 
 Route::get('/widget/{object}', [widgetController::class, 'widgetObject']);
 Route::get('/widget/Info/Attributes', [widgetController::class, 'widgetInfoAttributes']);
+Route::get('LOG/widget/Info/Attributes', [widgetController::class, 'LOG_widgetInfoAttributes']);
 
 Route::get('/Popup/{object}', [PopapController::class, 'Popup']);
 Route::get('/Popup/{object}/show', [PopapController::class, 'showPopup']);
