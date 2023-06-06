@@ -294,7 +294,11 @@ class TicketService
         } else $check_attributes_in_value_name = true;
 
         $Result_attributes = $this->setAttributesToPutBody($Body, $postTicket, $check_attributes_in_value_name, $attributes);
-        $result['description'] = $this->descriptionToCreate($oldBody, $postTicket, 'Продажа, Фискальный номер: ');
+        if ($this->Setting->accountId == '686ca08f-eb47-11e8-9109-f8fc00009aa4'){
+
+        } else {
+            $result['description'] = $this->descriptionToCreate($oldBody, $postTicket, 'Продажа, Фискальный номер: ');
+        }
         $Resul_positions = $this->setPositionsToPutBody($positions, $positionsBody);
 
         if ($Result_attributes != null){ $result['attributes'] = $Result_attributes; }
