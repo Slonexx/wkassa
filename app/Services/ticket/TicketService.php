@@ -114,7 +114,16 @@ class TicketService
 
         $paymentsAll = $this->getPayments($money_card, $money_cash, $money_mobile, $total);
         $items = $this->getItems($positions, $id_entity, $entity_type);
-        $customer = $this->getCustomer($id_entity, $entity_type);
+        if ($this->Setting->accountId == '686ca08f-eb47-11e8-9109-f8fc00009aa4'){
+            $customer = [
+                'email' => null,
+                'phone' => null,
+                'inn' => null,
+            ];
+        } else {
+            $customer = $this->getCustomer($id_entity, $entity_type);
+        }
+
 
         if ($operation == '') return ['Status' => false, 'Message' => 'не выбран тип продажи'];
         if ($Change < 0) return ['Status' => false, 'Message' => 'Сдача не может быть отрицательной, проверьте сумму'];
@@ -151,6 +160,8 @@ class TicketService
         if ($result['TicketModifiers'] == null){
             unset($result['TicketModifiers']);
         }
+
+
 
         return $result;
     }
