@@ -233,7 +233,22 @@ class TicketService
                                 'Mark' =>(string) $code->cis,
                             ];
                         }
+                    }
+                    elseif ($item->id == $item_2->id){
+                        $result['Items'][] = [
+                            'Count' => 1,
+                            'Price' => (float) $item->price,
 
+                            'TaxType' => $TaxType,//Налог в тенге РАССЧИТАТЬ!
+                            'TaxPercent' => (int) $TaxPercent,
+                            'Tax' => round(($item->price * 1 - $discount) / (($TaxPercent + 100) / 100) * ($TaxPercent / 100),2),
+
+
+                            'PositionName' => (string) $item->name,
+                            'PositionCode' => $id,
+                            'Discount' =>(float) $discount,
+                            'UnitCode' => (int) $item->UOM,
+                        ];
                     }
                 }
             }
@@ -253,9 +268,6 @@ class TicketService
                     'UnitCode' => (int) $item->UOM,
                 ];
             }
-
-
-
             if (!isset($result['TicketModifiers'])) {
                 $result['TicketModifiers'] = null;
             }
