@@ -48,6 +48,8 @@ Route::get('LOG/widget/Info/Attributes', [widgetController::class, 'LOG_widgetIn
 Route::get('/Popup/{object}', [PopapController::class, 'Popup']);
 Route::get('/Popup/{object}/show', [PopapController::class, 'showPopup']);
 Route::post('/Popup/{object}/send', [PopapController::class, 'sendPopup']);
+
+Route::post('/Test/{object}/send', [PopapController::class, 'TestSendPopup']);
 Route::get('/Popup/print/{accountId}/{entity_type}/{object}', [PrintController::class, 'PopupPrint']);
 
 
