@@ -253,9 +253,7 @@ class DevService
                     'UnitCode' => (int) $item->UOM,
                 ];
             }
-
-
-
+            dd($result);
             if (!isset($result['TicketModifiers'])) {
                 $result['TicketModifiers'] = null;
             }
