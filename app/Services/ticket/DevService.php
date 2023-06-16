@@ -106,9 +106,6 @@ class DevService
 
     private function setBodyToPostClient(mixed $id_entity, mixed $entity_type, mixed $money_card, mixed $money_cash, mixed $money_mobile, mixed $payType, mixed $total, mixed $positions): array
     {
-
-        //dd($this->Setting, $id_entity, $entity_type, $money_card, $money_cash, $payType, $total, $positions);
-
         $operation = $this->getOperation($payType);
         $Change = ($money_card + $money_cash + $money_mobile) - $total;
 
