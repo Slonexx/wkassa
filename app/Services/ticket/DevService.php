@@ -213,7 +213,6 @@ class DevService
             if ($typeObject == 'demand'){
                 $demand =  $this->msClient->get('https://online.moysklad.ru/api/remap/1.2/entity/' . $typeObject . '/' . $idObject);
                 $demandPos =  $this->msClient->get($demand->positions->meta->href)->rows;
-                dd($demandPos);
 
                 foreach ($demandPos as $item_2){
                     if ( $item->id == $item_2->id and isset($item_2->trackingCodes) ){
@@ -234,7 +233,22 @@ class DevService
                                 'Mark' =>(string) $code->cis,
                             ];
                         }
+                    }
+                    elseif ($item->id == $item_2->id){
+                        $result['Items'][] = [
+                            'Count' => 1,
+                            'Price' => (float) $item->price,
 
+                            'TaxType' => $TaxType,//Налог в тенге РАССЧИТАТЬ!
+                            'TaxPercent' => (int) $TaxPercent,
+                            'Tax' => round(($item->price * 1 - $discount) / (($TaxPercent + 100) / 100) * ($TaxPercent / 100),2),
+
+
+                            'PositionName' => (string) $item->name,
+                            'PositionCode' => $id,
+                            'Discount' =>(float) $discount,
+                            'UnitCode' => (int) $item->UOM,
+                        ];
                     }
                 }
             }
