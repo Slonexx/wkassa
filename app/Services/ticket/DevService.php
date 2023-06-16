@@ -213,6 +213,7 @@ class DevService
             if ($typeObject == 'demand'){
                 $demand =  $this->msClient->get('https://online.moysklad.ru/api/remap/1.2/entity/' . $typeObject . '/' . $idObject);
                 $demandPos =  $this->msClient->get($demand->positions->meta->href)->rows;
+                dd($demandPos);
 
                 foreach ($demandPos as $item_2){
                     if ( $item->id == $item_2->id and isset($item_2->trackingCodes) ){
