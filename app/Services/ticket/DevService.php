@@ -233,7 +233,7 @@ class DevService
                     }
                     elseif ($item->id == $item_2->id){
                         $result['Items'][] = [
-                            'Count' => 1,
+                            'Count' => $item->quantity,
                             'Price' => (float) $item->price,
 
                             'TaxType' => $TaxType,//Налог в тенге РАССЧИТАТЬ!
