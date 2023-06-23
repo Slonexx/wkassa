@@ -241,7 +241,7 @@ class TicketService
 
                             'TaxType' => $TaxType,//Налог в тенге РАССЧИТАТЬ!
                             'TaxPercent' => (int) $TaxPercent,
-                            'Tax' => round(($item->price * 1 - $discount) / (($TaxPercent + 100) / 100) * ($TaxPercent / 100),2),
+                            'Tax' => round(($item->price * $item->quantity - $discount) / (($TaxPercent + 100) / 100) * ($TaxPercent / 100),2),
 
 
                             'PositionName' => (string) $item->name,
