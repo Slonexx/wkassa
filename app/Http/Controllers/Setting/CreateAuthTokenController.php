@@ -12,13 +12,19 @@ use App\Http\Controllers\Controller;
 use App\Services\workWithBD\DataBaseService;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 
 class CreateAuthTokenController extends Controller
 {
-    public function getCreateAuthToken(Request $request, $accountId): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function getCreateAuthToken(Request $request, $accountId): Factory|View|Application
     {
         $isAdmin = $request->isAdmin;
         $SettingBD = new getMainSettingBD($accountId);
@@ -32,7 +38,7 @@ class CreateAuthTokenController extends Controller
         ]);
     }
 
-    public function postCreateAuthToken(Request $request, $accountId): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
+    public function postCreateAuthToken(Request $request, $accountId): View|Factory|RedirectResponse|Application
     {
         $Setting = new getSettingVendorController($accountId);
         $SettingBD = new getMainSettingBD($accountId);
@@ -59,7 +65,7 @@ class CreateAuthTokenController extends Controller
                     ]
                 ],
                 "Roundtype" => 2,
-                "ExtenalCheckNumber" => Str::uuid()->toString(),
+                "ExternalCheckNumber" => Str::uuid()->toString(),
             ]);
 
             $result = json_decode($body->getBody()->getContents());
@@ -104,7 +110,10 @@ class CreateAuthTokenController extends Controller
     }
 
 
-    public function createAuthToken(Request $request): \Illuminate\Http\JsonResponse
+    /**
+     * @throws GuzzleException
+     */
+    public function createAuthToken(Request $request): JsonResponse
     {
         $URL_WEBKASSA = Config::get("Global");
         $url = $URL_WEBKASSA['webkassa'].'api/Authorize';
@@ -121,7 +130,7 @@ class CreateAuthTokenController extends Controller
                 'status' => $post->getStatusCode(),
                 'auth_token' => json_decode($post->getBody())->Data->Token,
             ];
-        } catch (\Throwable $e){
+        } catch (BadResponseException $e){
             $result = [
                 'status' => $e->getCode(),
                 'auth_token' => null,

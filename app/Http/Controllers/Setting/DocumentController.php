@@ -5,11 +5,16 @@ namespace App\Http\Controllers\Setting;
 use App\Http\Controllers\BD\getMainSettingBD;
 use App\Http\Controllers\Controller;
 use App\Services\workWithBD\DataBaseService;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Throwable;
 
 class DocumentController extends Controller
 {
-    public function getDocument(Request $request, $accountId): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function getDocument(Request $request, $accountId): Factory|View|Application
     {
         $isAdmin = $request->isAdmin;
 
@@ -63,11 +68,11 @@ class DocumentController extends Controller
         ]);
     }
 
-    public function postDocument(Request $request, $accountId): \Illuminate\Http\RedirectResponse
+    public function postDocument(Request $request, $accountId): RedirectResponse
     {
         try {
             DataBaseService::createDocumentSetting($accountId, $request->createDocument_asWay, $request->payment_type, $request->OperationCash, $request->OperationCard);
-        } catch (\Throwable $e){
+        } catch (Throwable $e){
             $message["getCode"] = "Ошибка " . $e->getCode();
             $message["message"] = "Ошибка " . $e->getMessage();
             return redirect()->route('getDocument', [ 'accountId' => $accountId, 'isAdmin' => $request->isAdmin, 'message'=>$message ]);

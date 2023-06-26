@@ -8,13 +8,15 @@ use App\Http\Controllers\BD\getMainSettingBD;
 use App\Http\Controllers\Controller;
 use App\Services\workWithBD\DataBaseService;
 use GuzzleHttp\Exception\BadResponseException;
-use Illuminate\Http\Client\Pool;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 class AccessController extends Controller
 {
-    public function getWorker($accountId, Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function getWorker($accountId, Request $request): Factory|View|Application
     {
         $isAdmin = $request->isAdmin;
         $message = $request->message;
@@ -66,7 +68,7 @@ class AccessController extends Controller
         ]);
     }
 
-    public function postWorker(Request $request, $accountId): \Illuminate\Http\RedirectResponse
+    public function postWorker(Request $request, $accountId): RedirectResponse
     {
         $isAdmin = $request->isAdmin;
         $allRequest = $request->request;

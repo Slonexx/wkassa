@@ -5,24 +5,14 @@ namespace App\Services\ticket;
 use App\Clients\KassClient;
 use App\Clients\MsClient;
 use App\Http\Controllers\BD\getMainSettingBD;
-use App\Services\AdditionalServices\DocumentService;
-use App\Services\MetaServices\MetaHook\AttributeHook;
 use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Support\Str;
 
 class TicketService
 {
 
-    private AttributeHook $attributeHook;
-    private DocumentService $documentService;
     private MsClient $msClient;
     private getMainSettingBD $Setting;
-    private KassClient $kassClient;
-
-    public function __construct(AttributeHook $attributeHook, DocumentService $documentService){
-        $this->attributeHook = $attributeHook;
-        $this->documentService = $documentService;
-    }
 
 
     public function createTicket($data): \Illuminate\Http\JsonResponse
@@ -43,7 +33,7 @@ class TicketService
 
         $this->Setting = new getMainSettingBD($accountId);
 
-        $this->kassClient = new KassClient($this->Setting->accountId);
+        $kassClient = new KassClient($this->Setting->accountId);
         $this->msClient = new MsClient($this->Setting->tokenMs);
 
         try {
@@ -63,7 +53,7 @@ class TicketService
 
         //dd($Body, json_encode($Body));
         try {
-            $postTicket = $this->kassClient->postCheck($Body);
+            $postTicket = $kassClient->postCheck($Body);
             if (property_exists($postTicket, 'Errors')){
                 if ($postTicket->Errors[0]->Text == "Срок действия сессии истек") {
                     $message = "Токен приложение недействителен, пожалуйста пройдите настройку заново";
@@ -110,6 +100,7 @@ class TicketService
         //dd($this->Setting, $id_entity, $entity_type, $money_card, $money_cash, $payType, $total, $positions);
 
         $operation = $this->getOperation($payType);
+        $payments = null;
         $Change = ($money_card + $money_cash + $money_mobile) - $total;
 
         $paymentsAll = $this->getPayments($money_card, $money_cash, $money_mobile, $total);
@@ -317,9 +308,7 @@ class TicketService
         } else $check_attributes_in_value_name = true;
 
         $Result_attributes = $this->setAttributesToPutBody($Body, $postTicket, $check_attributes_in_value_name, $attributes);
-        if ($this->Setting->accountId == '686ca08f-eb47-11e8-9109-f8fc00009aa4'){
-
-        } else {
+        if ($this->Setting->accountId == '686ca08f-eb47-11e8-9109-f8fc00009aa4'){ } else {
             $result['description'] = $this->descriptionToCreate($oldBody, $postTicket, 'Продажа, Фискальный номер: ');
         }
         $Resul_positions = $this->setPositionsToPutBody($positions, $positionsBody);
@@ -334,7 +323,7 @@ class TicketService
     {
         $Result_attributes = null;
         foreach ($attributes as $item) {
-            if ($item->name == "фискальный номер (WebKassa)" and $check_attributes == true) {
+            if ($item->name == "фискальный номер (WebKassa)" and $check_attributes) {
                 $Result_attributes[] = [
                     "meta"=> [
                         "href"=> $item->meta->href,
@@ -406,7 +395,7 @@ class TicketService
 
     }
 
-    private function createPaymentDocument( getMainSettingBD $Setting, string $entity_type, mixed $OldBody, mixed $payments)
+    private function createPaymentDocument( getMainSettingBD $Setting, string $entity_type, mixed $OldBody, mixed $payments): void
     {
         switch ($Setting->paymentDocument){
             case "1": {
@@ -513,9 +502,6 @@ class TicketService
                     } else {
                         if ($entity_type != 'salesreturn') {
                             $url_to_body = $url . 'paymentin';
-                        } else {
-                            //$url_to_body = $url . 'paymentout';
-                            break;
                         }
                     }
 
@@ -648,7 +634,7 @@ class TicketService
 
     }
 
-    private function createReturnDocument(mixed $newBody, mixed $putBody, mixed $oldBody, mixed $entity_type)
+    private function createReturnDocument(mixed $newBody, mixed $putBody, mixed $oldBody, mixed $entity_type): void
     {
         if ($entity_type != 'salesreturn') {
             $attributes_item =  $this->msClient->get('https://online.moysklad.ru/api/remap/1.2/entity/salesreturn/metadata/attributes/')->rows;
@@ -717,7 +703,6 @@ class TicketService
                 'description' => 'Созданный документ возврата с ',
                 'organizationAccount' => null,
                 'demand' => null,
-                'store' => null,
             ];
 
             if (isset($newBody->organizationAccount)){
@@ -771,7 +756,7 @@ class TicketService
 
             try {
                 $this->msClient->post($url, $body);
-            } catch (BadResponseException $exception){
+            } catch (BadResponseException){
 
             }
         }
@@ -784,7 +769,7 @@ class TicketService
             $OldMessage = $oldBody->description.PHP_EOL;
         }
 
-        return (string) $OldMessage.'['.( (int) date('H') + 6 ).date(':i:s').' '. date('Y-m-d') .'] '. $message.$postTicket->Data->CheckNumber ;
+        return $OldMessage.'['.( (int) date('H') + 6 ).date(':i:s').' '. date('Y-m-d') .'] '. $message.$postTicket->Data->CheckNumber ;
     }
 
 

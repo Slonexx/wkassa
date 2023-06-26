@@ -6,17 +6,19 @@ use App\Clients\KassClient;
 use App\Http\Controllers\BD\getMainSettingBD;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 
 class ChangeController extends Controller
 {
-    public function getChange(Request $request, $accountId){
+    public function getChange(Request $request, $accountId): View|Factory|RedirectResponse|Application
+    {
         $isAdmin = $request->isAdmin;
 
         $SettingBD = new getMainSettingBD($accountId);
-        $Config = Config::get("Global");
 
         try {
             $Client = new KassClient($accountId);
@@ -37,7 +39,6 @@ class ChangeController extends Controller
         }
 
         $kassa = $SettingBD->CashboxUniqueNumber;
-        //dd($ArrayKassa);
         return view('main.change', [
             'accountId' => $accountId,
             'isAdmin' => $isAdmin,
@@ -64,7 +65,7 @@ class ChangeController extends Controller
             if ($request->OperationType == 1){
                 $message = "Изъятие из кассу наличных на сумму: ".$request->Sum.' '.PHP_EOL." Наличных осталось в кассе: ".$body->Data->Sum;
             } elseif ($request->OperationType == 0) {
-                $message = "Внесение в кассу наличных на сумму: ".$request->Sum.' '.PHP_EOL." Наличных осталось в кассе: ".$body->Data->Sum;;
+                $message = "Внесение в кассу наличных на сумму: ".$request->Sum.' '.PHP_EOL." Наличных осталось в кассе: ".$body->Data->Sum;
             }
 
             return [

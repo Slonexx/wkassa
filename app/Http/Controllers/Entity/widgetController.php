@@ -9,11 +9,15 @@ use App\Http\Controllers\Config\getSettingVendorController;
 use App\Http\Controllers\Config\Lib\VendorApiController;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Exception\BadResponseException;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class widgetController extends Controller
 {
-    public function widgetObject(Request $request, $object): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function widgetObject(Request $request, $object): Factory|View|Application
     {
         try {
             $vendorAPI = new VendorApiController();
@@ -27,7 +31,7 @@ class widgetController extends Controller
             $Setting = new getSettingVendorController($accountId);
             $Client = new MsClient($Setting->TokenMoySklad);
 
-            $body = $Client->get("https://online.moysklad.ru/api/remap/1.2/entity/employee");
+            $Client->get("https://online.moysklad.ru/api/remap/1.2/entity/employee");
 
             if ($Workers->access == 0 or $Workers->access = null){ return view( 'widget.noAccess', ['accountId' => $accountId, ] ); }
 
@@ -37,7 +41,7 @@ class widgetController extends Controller
             ] );
 
         } catch (BadResponseException $e){
-
+            $message[]="";
             $error = json_decode($e->getResponse()->getBody()->getContents());
             if (property_exists($error, 'errors')) {
                 foreach ($error->errors as $item){
@@ -56,7 +60,7 @@ class widgetController extends Controller
     }
 
 
-    public function widgetInfoAttributes(Request $request)
+    public function widgetInfoAttributes(Request $request): View|Factory|JsonResponse|Application
     {
         $ticket_id = null;
 
@@ -107,7 +111,7 @@ class widgetController extends Controller
     }
 
 
-    public function LOG_widgetInfoAttributes(Request $request): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\Contracts\Foundation\Application
+    public function LOG_widgetInfoAttributes(Request $request): View|Factory|JsonResponse|Application
     {
         $ticket_id = null;
 

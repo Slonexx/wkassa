@@ -5,26 +5,24 @@ namespace App\Http\Controllers\Entity;
 use App\Clients\MsClient;
 use App\Http\Controllers\BD\getMainSettingBD;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\TicketController;
 use App\Services\ticket\DevService;
 use App\Services\ticket\TicketService;
 use GuzzleHttp\Exception\BadResponseException;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use JetBrains\PhpStorm\ArrayShape;
 
 class PopapController extends Controller
 {
-    public function Popup(Request $request, $object): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function Popup($object): Factory|View|Application
     {
-        /*switch ($object){
-            case "customerorder":{
-                return view( 'popup.fiscalization', [] );
-            }
-        }*/
         return view( 'popup.ViewPopap', ['Entity' => $object] );
     }
 
-    public function showPopup(Request $request, $object): \Illuminate\Http\JsonResponse
+    public function showPopup(Request $request, $object): JsonResponse
     {
 
         $object_Id = $request->object_Id;
@@ -60,7 +58,7 @@ class PopapController extends Controller
             }
         }
 
-        if ($payment_type == null) $payment_type == "0";
+        if ($payment_type == null) $payment_type = "0";
 
         $vatEnabled = $Body->vatEnabled;
         $vat = null;
@@ -70,7 +68,7 @@ class PopapController extends Controller
         foreach ($positions as $id=>$item){
             $final = $item->price / 100 * $item->quantity;
 
-            if ($vatEnabled == true) {if ($Body->vatIncluded == false) {
+            if ($vatEnabled) {if (!$Body->vatIncluded) {
                 $final = $item->price / 100 * $item->quantity;
                 $final = $final + ( $final * ($item->vat/100) );
             }}
@@ -119,13 +117,13 @@ class PopapController extends Controller
             ];
         }
 
-        if ($vatEnabled == true) {
+        if ($vatEnabled) {
             $vat = [
                 'vatEnabled' => $Body->vatEnabled,
                 'vatIncluded' => $Body->vatIncluded,
                 'vatSum' => $Body->vatSum / 100 ,
             ];
-        };
+        }
         return [
             "statusCode" => 200,
 
@@ -146,7 +144,7 @@ class PopapController extends Controller
 
 
 
-    public function sendPopup(Request $request): \Illuminate\Http\JsonResponse
+    public function sendPopup(Request $request): JsonResponse
     {
 
         $data = $request->all();
@@ -165,7 +163,7 @@ class PopapController extends Controller
 
         $positions =  json_decode($data['position']) ;
         $position = null;
-        foreach ($positions as $id=>$item){
+        foreach ($positions as $item){
 
             if ($item != null){
                 $position[] = $item;
@@ -189,16 +187,15 @@ class PopapController extends Controller
 
 
         try {
-
-            return app(TicketService::class)->createTicket($body);
-
-        } catch (\Throwable $e){
+            $TicketService = new TicketService();
+            return $TicketService->createTicket($body);
+        } catch (BadResponseException $e){
             return response()->json($e->getMessage());
         }
 
     }
 
-    public function TestSendPopup(Request $request): \Illuminate\Http\JsonResponse
+    public function TestSendPopup(Request $request): JsonResponse
     {
 
         $data = $request->all();
@@ -217,7 +214,7 @@ class PopapController extends Controller
 
         $positions =  json_decode($data['position']) ;
         $position = null;
-        foreach ($positions as $id=>$item){
+        foreach ($positions as $item){
 
             if ($item != null){
                 $position[] = $item;
