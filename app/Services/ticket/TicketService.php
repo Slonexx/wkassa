@@ -492,12 +492,7 @@ class TicketService
                 foreach ($payments as $item){
                     $change = 0;
                     if ($item['PaymentType'] == 0){
-                        if ($entity_type != 'salesreturn') {
-                            $url_to_body = $url . 'cashin';
-                        } else {
-                            //$url_to_body = $url . 'cashout';
-                            break;
-                        }
+                        if ($entity_type != 'salesreturn') { $url_to_body = $url . 'cashin'; } else { break; }
                         if (isset($item['change'])) $change = $item['change'];
                     } else {
                         if ($entity_type != 'salesreturn') {
@@ -531,7 +526,7 @@ class TicketService
                             'type' => $OldBody->agent->meta->type,
                             'mediaType' => $OldBody->agent->meta->mediaType,
                         ] ],
-                        'sum' => ($item['total']-$change) * 100,
+                        'sum' => ($item['Sum']-$change) * 100,
                         'operations' => [
                             0 => [
                                 'meta'=> [
