@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'appId' => '672c9f92-0f5c-4eef-8ec1-1ea737be7515',
-    'appUid' => 'webkassa.smartinnovations',
-    'secretKey' => '0rhC5i8gdbSqJ3KnoBjZfci3hnJseq0mGb0QdqEu3PiIM4wp5loQCRMIfIMK5AR5yPJ2OvApvzCzQ9Z81pbYJpYWkp9LlsvvUW8c47q1wJocUZW7GeNxGAqE6AR98RX5',
-    'appBaseUrl' => 'https://smartwebkassa.kz/',
+    'appId' => '0957a5e9-137e-4db5-8508-6a441aa79e74',
+    'appUid' => 'devwebkassa.smartinnovations',
+    'secretKey' => 't1vhIVoCCt6Nkuxhkju6PoRY2eUtiX1Sq6rinEOk1F2QXdCU7wxtcng0JtjAhZOG9cRPeupDYPO9W3XtAoE6LlFR5u9smznW6lUhtfQxBeXaHP2WVJ2jQHkgloCPnA3L',
+    'appBaseUrl' => 'https://dev.smartwebkassa.kz/',
 ];
