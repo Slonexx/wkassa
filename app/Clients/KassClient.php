@@ -43,9 +43,8 @@ class KassClient
             $result = [];
             $body = [ 'body' => json_encode(['Token'=> $this->Setting->authtoken]) ];
             $tmp = json_decode($this->client->post($this->URL_WEBKASSA['webkassa'].'api/CashBoxes', $body)->getBody()->getContents());
-            foreach ($tmp->Data->List as $item){
-                $result[] = $item;
-            }
+            if (property_exists($tmp, 'Data')) foreach ($tmp->Data->List as $item){ $result[] = $item; }
+            else { return []; }
 
             if (property_exists($tmp, 'Errors')){
                 return [];
