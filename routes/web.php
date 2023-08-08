@@ -34,6 +34,9 @@ Route::post('/Setting/Document/{accountId}', [documentController::class, 'postDo
 Route::get('/Setting/Worker/{accountId}', [AccessController::class, 'getWorker'])->name('getWorker');
 Route::post('/Setting/Worker/{accountId}', [AccessController::class, 'postWorker']);
 
+Route::get('/Setting/Automation/{accountId}', [AutomationController::class, 'getAutomation'])->name('getAutomation');
+Route::post('/Setting/Automation/{accountId}', [AutomationController::class, 'postAutomation']);
+
 
 Route::get('/kassa/change/{accountId}', [ChangeController::class, 'getChange']);
 Route::get('/kassa/MoneyOperation/{accountId}', [ChangeController::class, 'MoneyOperation']);
@@ -43,8 +46,7 @@ Route::get('/kassa/ZReport/{accountId}', [ReportController::class, 'ZReport']);
 Route::get('/Setting/error/{accountId}', [errorSettingController::class, 'getError'])->name('errorSetting');
 
 
-Route::get('/Setting/Automation/{accountId}', [AutomationController::class, 'getAutomation'])->name('getAutomation');
-Route::post('/Setting/Automation/{accountId}', [AutomationController::class, 'postAutomation']);
+
 
 
 //Widget
