@@ -1,5 +1,5 @@
 @extends('layout')
-@section('item', 'link_6')
+@section('item', 'link_7')
 @section('content')
 
     <script> function ajax_settings(url, method, data){
