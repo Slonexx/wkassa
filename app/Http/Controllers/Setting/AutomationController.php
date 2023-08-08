@@ -156,25 +156,25 @@ class AutomationController extends Controller
             }
             if ($Webhook_check) {
                 foreach ($Client->get('https://online.moysklad.ru/api/remap/1.2/entity/webhook/')->rows as $item){
-                    if (strpos(($item->url), "https://dev.smartwebkassa.kz/") !== false) {
+                    if (strpos(($item->url), "https://smartwebkassa.kz/") !== false) {
                         $Client->delete($item->meta->href,null);
                     }
                 }
 
                 $Client->post('https://online.moysklad.ru/api/remap/1.2/entity/webhook/', [
-                    'url' => 'https://dev.smartwebkassa.kz/api/webhook/customerorder',
+                    'url' => 'https://smartwebkassa.kz/api/webhook/customerorder',
                     'action' => "UPDATE",
                     'entityType' => 'customerorder',
                     'diffType' => "FIELDS",
                 ]);
                 $Client->post('https://online.moysklad.ru/api/remap/1.2/entity/webhook/', [
-                    'url' => 'https://dev.smartwebkassa.kz/api/webhook/demand',
+                    'url' => 'https://smartwebkassa.kz/api/webhook/demand',
                     'action' => "UPDATE",
                     'entityType' => 'demand',
                     'diffType' => "FIELDS",
                 ]);
                 $Client->post('https://online.moysklad.ru/api/remap/1.2/entity/webhook/', [
-                    'url' => 'https://dev.smartwebkassa.kz/api/webhook/salesreturn',
+                    'url' => 'https://smartwebkassa.kz/api/webhook/salesreturn',
                     'action' => "UPDATE",
                     'entityType' => 'salesreturn',
                     'diffType' => "FIELDS",
