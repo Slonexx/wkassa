@@ -144,7 +144,7 @@ class AutomationController extends Controller
 
         try {
             $Client = new MsClient($Setting->TokenMoySklad);
-            $url_check ='https://smartwebkassa.kz/api/webhook/' ;
+            $url_check ='https://dev.smartwebkassa.kz/api/webhook/' ;
             $Webhook_check = true;
             $Webhook_body = $Client->get('https://online.moysklad.ru/api/remap/1.2/entity/webhook/')->rows;
             if ($Webhook_body != []){
