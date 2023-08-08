@@ -13,7 +13,7 @@
             $('#mainCreate').append('<div id="child_' + i + '" class="mt-2 row">' +
                 '<div class="col-2"> <select onchange="FU_statusAutomation(' + status + ', ' + entity + ', ' + project + ', ' + saleschannel + ')" id="entity_' + i + '" name="entity_' + i + '" class="form-select text-black"> <option value="0">Заказ покупателя</option> <option value="1">Отгрузки</option> <option value="2">Возврат покупателя</option> </select> </div>' +
                 '<div class="col-2"> <select id="status_' + i + '" name="status_' + i + '" class="form-select text-black"> </select> </div>' +
-                '<div class="col-2"> <select id="payment_' + i + '" name="payment_' + i + '" class="form-select text-black"> <option value="0">Наличные</option> <option value="1">Карта</option> <option value="2">Мобильная</option> <option value="3">От выбора справочника</option> </select> </div>' +
+                '<div class="col-2"> <select id="payment_' + i + '" name="payment_' + i + '" class="form-select text-black"> <option value="0">Наличные</option> <option value="1">Карта</option> <option value="3">От выбора справочника</option> </select> </div>' +
                 '<div class="row col-5 text-center"> ' +
                 '<div class="col-6"> ' +
                 '<div class="btn btn-light border border-2 dropdown-toggle"  class="form-select text-black" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Выбрать канал продаж </div>' +
@@ -48,7 +48,7 @@
                 $('#mainCreate').append('<div id="child_' + i + '" class="mt-2 row">' +
                     '<div class="col-2"> <select onchange="FU_statusAutomation(' + status + ', ' + entity + ', ' + project + ', ' + saleschannel + ')" id="entity_' + i + '" name="entity_' + i + '" class="form-select text-black"> <option value="0">Заказ покупателя</option> <option value="1">Отгрузки</option> <option value="2">Возврат покупателя</option> </select> </div>' +
                     '<div class="col-2"> <select id="status_' + i + '" name="status_' + i + '" class="form-select text-black"> </select> </div>' +
-                    '<div class="col-2"> <select id="payment_' + i + '" name="payment_' + i + '" class="form-select text-black"> <option value="0">Наличные</option> <option value="1">Карта</option> <option value="2">Мобильная</option> <option value="3">От выбора справочника</option> </select> </div>' +
+                    '<div class="col-2"> <select id="payment_' + i + '" name="payment_' + i + '" class="form-select text-black"> <option value="0">Наличные</option> <option value="1">Карта</option> <option value="3">От выбора справочника</option> </select> </div>' +
                     '<div class="row col-5 text-center"> ' +
                     '<div class="col-6"> ' +
                     '<div class="btn btn-light border border-2 dropdown-toggle"  class="form-select text-black" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Выбрать канал продаж </div>' +
