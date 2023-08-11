@@ -40,7 +40,7 @@ class ReportController extends Controller
             $CashboxUniqueNumber = $Setting->CashboxUniqueNumber;
         }
         try {
-            $body = $Client->XReport($CashboxUniqueNumber);
+            $body = $Client->ZReport($CashboxUniqueNumber);
             if (property_exists($body, "Errors")) {
                 return [
                     'statusCode' => 500,
