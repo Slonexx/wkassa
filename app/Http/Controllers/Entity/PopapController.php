@@ -44,14 +44,17 @@ class PopapController extends Controller
 
     }
 
-    #[ArrayShape(["statusCode" => "int", 'id' => "", 'name' => "", 'sum' => "float|int", 'vat' => "array|null", 'attributes' => "null[]", 'products' => "array", 'application' => "array"])] public function info_object_Id(mixed $Body, MsClient $Client, getMainSettingBD $Setting ): array
+    public function info_object_Id(mixed $Body, MsClient $Client, getMainSettingBD $Setting ): array
     {
-        $attributes = [ 'ticket_id' => null, ];
+        $attributes = ['ticket_id' => null, ];
         $payment_type = $Setting->payment_type;
 
-        if (property_exists($Body, 'attributes')){
-            foreach ($Body->attributes as $item){
-                if ($item->name == 'фискальный номер (WebKassa)'){
+        $start_time = microtime(true); // Время начала выполнения скрипта
+        $cycle_counter = 0; // Счетчик циклов
+
+        if (property_exists($Body, 'attributes')) {
+            foreach ($Body->attributes as $item) {
+                if ($item->name == 'фискальный номер (WebKassa)') {
                     $attributes['ticket_id'] = $item->value;
                     break;
                 }
@@ -102,7 +105,6 @@ class PopapController extends Controller
                 }
             }
 
-
             $products[$id] = [
                 'position' => $item->id,
                 'propety' => $propety_uom,
@@ -115,6 +117,19 @@ class PopapController extends Controller
                 'discount' => round($item->discount, 2),
                 'final' => round($final - ( $final * ($item->discount/100) ), 2),
             ];
+
+            $cycle_counter++;
+            if ($cycle_counter % 45 == 0) {
+                $end_time = microtime(true);
+                $elapsed_time = $end_time - $start_time;
+
+                if ($elapsed_time < 3) {
+                    $sleep_time = 3 - $elapsed_time;
+                    sleep($sleep_time);
+                }
+                $start_time = microtime(true); // Обновляем время начала выполнения скрипта
+            }
+
         }
 
         if ($vatEnabled) {
