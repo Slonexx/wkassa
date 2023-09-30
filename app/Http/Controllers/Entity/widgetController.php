@@ -31,7 +31,7 @@ class widgetController extends Controller
             $Setting = new getSettingVendorController($accountId);
             $Client = new MsClient($Setting->TokenMoySklad);
 
-            $Client->get("https://online.moysklad.ru/api/remap/1.2/entity/employee");
+            $Client->get("https://api.moysklad.ru/api/remap/1.2/entity/employee");
 
             if ($Workers->access == 0 or $Workers->access = null){ return view( 'widget.noAccess', ['accountId' => $accountId, ] ); }
 
@@ -165,9 +165,9 @@ class widgetController extends Controller
     private function getUrlEntity($enType,$enId): ?string
     {
         return match ($enType) {
-            "customerorder" => "https://online.moysklad.ru/api/remap/1.2/entity/customerorder/" . $enId,
-            "demand" => "https://online.moysklad.ru/api/remap/1.2/entity/demand/" . $enId,
-            "salesreturn" => "https://online.moysklad.ru/api/remap/1.2/entity/salesreturn/" . $enId,
+            "customerorder" => "https://api.moysklad.ru/api/remap/1.2/entity/customerorder/" . $enId,
+            "demand" => "https://api.moysklad.ru/api/remap/1.2/entity/demand/" . $enId,
+            "salesreturn" => "https://api.moysklad.ru/api/remap/1.2/entity/salesreturn/" . $enId,
             default => null,
         };
     }
