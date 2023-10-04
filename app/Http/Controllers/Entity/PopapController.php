@@ -69,7 +69,7 @@ class PopapController extends Controller
         $positions = $Client->get($Body->positions->meta->href)->rows;
 
         foreach ($positions as $id=>$item){
-            $final = round(($item->price / 100 * $item->quantity), 2);
+            $final = round((($item->price / 100) * $item->quantity), 2);
 
             if ($vatEnabled) {
                 if (!$Body->vatIncluded) {
