@@ -71,9 +71,10 @@ class PopapController extends Controller
         foreach ($positions as $id=>$item){
             $final = $item->price / 100 * $item->quantity;
 
-            if ($vatEnabled) {if (!$Body->vatIncluded) {
-                $final = $item->price / 100 * $item->quantity;
-                $final = $final + ( $final * ($item->vat/100) );
+            if ($vatEnabled) {
+                if (!$Body->vatIncluded) {
+                    $final = $item->price / 100 * $item->quantity;
+                    $final = $final + ( $final * ($item->vat/100) );
             }}
             $uom_body = $Client->get($item->assortment->meta->href);
 

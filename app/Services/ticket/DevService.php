@@ -61,7 +61,12 @@ class DevService
 
         if (isset($Body['Status'])) { return response()->json($Body['Message']); }
 
-        dd($Body, json_encode($Body));
+        $price = 0;
+        foreach ($Body['Positions'] as $item) {
+            $price = ($item['Count'] * $item['Price'])-$item['Discount'];
+        }
+
+        dd($Body, $price, json_encode($Body));
         try {
             $postTicket = $this->kassClient->postCheck($Body);
             if (property_exists($postTicket, 'Errors')){
