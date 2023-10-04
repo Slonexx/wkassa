@@ -117,6 +117,12 @@ class PopapController extends Controller
                 'vat' => $item->vat,
                 'discount' => round($item->discount, 2),
                 'final' => round($final - ( $final * ($item->discount/100) ), 2),
+                'test' => [
+                    'final' => $final,
+                    'item->discount/100' => $item->discount/100,
+                    'final - discount' => $final * ($item->discount/100) ,
+                    'final-final' => $final - ( $final * ($item->discount/100) )
+                ]
             ];
 
             $cycle_counter++;
