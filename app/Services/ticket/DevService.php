@@ -63,7 +63,7 @@ class DevService
 
         $price = 0;
         foreach ($Body['Positions'] as $item) {
-            $price = ($item['Count'] * $item['Price'])-$item['Discount'];
+            $price = $price + (($item['Count'] * $item['Price'])-$item['Discount']);
         }
 
         dd($Body, $price, json_encode($Body));
