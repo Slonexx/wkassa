@@ -380,9 +380,9 @@ class TicketService
         foreach ($positionsBody as $id=>$item){
             $result[$id] = [
                 "id" => $item->id,
-                "quantity" => (int) $item->quantity,
+                "quantity" => $item->quantity,
                 "price" => (float) $item->price * 100,
-                "discount" => (int) $item->discount,
+                "discount" => $item->discount,
                 "vat" => (int) $item->is_nds,
                 "assortment" => ['meta'=>[
                     "href" => $sort[$id]->assortment->meta->href,
