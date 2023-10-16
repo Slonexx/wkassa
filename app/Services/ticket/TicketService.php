@@ -64,9 +64,29 @@ class TicketService
                     'errors'    => $message
                 ]);
             }
+        } catch (BadResponseException  $e){
+            return response()->json([
+                'info'    => 'Ошибка при отправки в кассу',
+                'status'    => 'error',
+                'code'      => $e->getCode(),
+                'errors'    => json_decode($e->getResponse()->getBody()->getContents(), true)
+            ]);
+        }
+
+        try {
             $putBody = $this->putBodyMS($entity_type, $Body, $postTicket, $oldBody, $positions);
             $put =  $this->msClient->put('https://api.moysklad.ru/api/remap/1.2/entity/'.$entity_type.'/'.$id_entity, $putBody);
+        } catch (BadResponseException $e) {
+            return response()->json([
+                'info'    => 'При сохранении данных в МС',
+                'status'    => 'error',
+                'code'      => $e->getCode(),
+                'errors'    => json_decode($e->getResponse()->getBody()->getContents(), true),
+                'postTicket'    => $postTicket,
+            ]);
+        }
 
+        try {
             if ($payType == 'return'){
                 $this->createReturnDocument($put, $postTicket, $putBody, $entity_type);
                 $put =  $this->msClient->put('https://api.moysklad.ru/api/remap/1.2/entity/'.$entity_type.'/'.$id_entity, [
@@ -76,6 +96,16 @@ class TicketService
             if ($this->Setting->paymentDocument != null ){
                 $this->createPaymentDocument($this->Setting, $entity_type, $put, $Body['Payments']);
             }
+        } catch (BadResponseException $e){
+            return response()->json([
+                'info'    => 'При создании документов',
+                'status'    => 'error',
+                'code'      => $e->getCode(),
+                'errors'    => json_decode($e->getResponse()->getBody()->getContents(), true),
+                'postTicket'    => $postTicket,
+            ]);
+        }
+
 
             return response()->json([
                 'status'    => 'Ticket created',
@@ -83,13 +113,7 @@ class TicketService
                 'postTicket' => $postTicket,
                 'ExternalCheckNumber' => $Body['ExternalCheckNumber'],
             ]);
-        } catch (BadResponseException  $e){
-            return response()->json([
-                'status'    => 'error',
-                'code'      => $e->getCode(),
-                'errors'    => json_decode($e->getResponse()->getBody()->getContents(), true)
-            ]);
-        }
+
 
     }
 
