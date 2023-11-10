@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Clients\MsClient;
 use App\Http\Controllers\Config\getSettingVendorController;
+use App\Http\Controllers\Controller;
 use App\Models\AutomationModel;
 use App\Services\webhook\AutomatingServices;
 use GuzzleHttp\Exception\BadResponseException;
@@ -34,12 +35,20 @@ class WebhookMSController extends Controller
         $setting = app(getSettingVendorController::class, ['accountId' => $accountId]);
         $msClient = new MsClient($setting->TokenMoySklad);
 
+        if (empty($request->auditContext)) {
+            return response()->json([
+                'code' => 203,
+                'message' => $this->returnMessage("2023-00-00 00:00:00", "Отсутствует auditContext, (изменений не было), скрипт прекращён!"),
+            ]);
+        }
+
         if (empty($events[0]['updatedFields'])) {
             return response()->json([
                 'code' => 203,
                 'message' => $this->returnMessage($auditContext['moment'], "Отсутствует updatedFields, (изменений не было), скрипт прекращён!"),
             ]);
         }
+
 
         // Заменим обращение к базе данных с использованием Eloquent ORM, чтобы сократить количество запросов
         $multiDimensionalArray = AutomationModel::where('accountId', $accountId)
@@ -83,9 +92,14 @@ class WebhookMSController extends Controller
             if ($item['entity'] == "0") {
                 $start['entity'] = true;
             }
-            if ($state->id == $item['status'] || $item['status'] == "0") {
+            if ($state->id == $item['status'] and in_array("state", $events[0]['updatedFields'])) {
                 $start['state'] = true;
             }
+
+            if ($item['status'] == "0") {
+                $start['state'] = true;
+            }
+
             if ($item['project'] != "0" and property_exists($objectBody, 'project')) {
 
                 foreach (array_filter(explode('/', $item['project'])) as $_item) {
