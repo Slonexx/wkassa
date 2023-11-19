@@ -28,10 +28,22 @@ class connectController extends Controller
                     'password' => $request->password,
                 ],
             ]);
-            $result = [
-                'status' => true,
-                'auth_token' => json_decode($post->getBody())->Data->Token,
-            ];
+
+            $content = json_decode($post->getBody()->getContents());
+
+            if (property_exists($content, 'Data')) {
+                $result = [
+                    'status' => true,
+                    'auth_token' => json_decode($post->getBody())->Data->Token,
+                ];
+            } else {
+                $result = [
+                    'status' => false,
+                    'content' => $content,
+                ];
+            }
+
+
         } catch (BadResponseException $e){
             $result = [
                 'status' => false,
