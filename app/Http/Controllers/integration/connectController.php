@@ -18,7 +18,8 @@ class connectController extends Controller
     {
 
         $URL_WEBKASSA = Config::get("Global");
-        $url = $URL_WEBKASSA['webkassa'].'api/Authorize';
+        if ($accountId == '1dd5bd55-d141-11ec-0a80-055600047495') $url = $URL_WEBKASSA['dev_webkassa'].'api/Authorize';
+        else $url = $URL_WEBKASSA['webkassa'].'api/Authorize';
 
         $client = new Client();
         try {
