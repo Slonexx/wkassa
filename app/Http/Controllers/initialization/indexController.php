@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\initialization;
 
+use App\Clients\MsClient;
 use App\Http\Controllers\BD\getPersonal;
 use App\Http\Controllers\Config\Lib\VendorApiController;
 use App\Http\Controllers\Controller;
+use App\Services\Settings\SettingsService;
+use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Http\Request;
 
 class indexController extends Controller
@@ -42,6 +45,27 @@ class indexController extends Controller
             'hideOrShow' => $hideOrShow,
         ] );
 
+    }
+
+    public function searchEmployeeByID($login): void
+    {
+        $allSettings = app(SettingsService::class)->getSettings();
+
+        foreach ($allSettings as $setting){
+
+            try {
+                $ClientCheckMC = new MsClient($setting->TokenMoySklad);
+                $body = $ClientCheckMC->get('https://api.moysklad.ru/api/remap/1.2/entity/employee?filter=uid~'.$login)->rows;
+
+                if ($body!=[]){
+                    dd($body);
+                }
+
+            } catch (BadResponseException $e) {
+                continue;
+            }
+
+        }
     }
 
 }
