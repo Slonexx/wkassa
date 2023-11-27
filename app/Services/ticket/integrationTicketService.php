@@ -41,7 +41,7 @@ class integrationTicketService
             return response()->json([
                 'status'    => false,
                 'code'      => $e->getCode(),
-                'errors'    => json_decode($e->getResponse()->getBody()->getContents(), true)
+                'message'    => json_decode($e->getResponse()->getBody()->getContents(), true)
             ]);
         }
 
@@ -59,7 +59,7 @@ class integrationTicketService
                 return response()->json([
                     'status'    => false,
                     'code'      => 500,
-                    'errors'    => $message
+                    'message'    => $message
                 ]);
             }
         } catch (BadResponseException  $e){
@@ -67,7 +67,7 @@ class integrationTicketService
                 'info'    => 'Ошибка при отправки в кассу',
                 'status'    => false,
                 'code'      => $e->getCode(),
-                'errors'    => json_decode($e->getResponse()->getBody()->getContents(), true)
+                'message'    => json_decode($e->getResponse()->getBody()->getContents(), true)
             ]);
         }
 
@@ -79,7 +79,7 @@ class integrationTicketService
                 'info'    => 'При сохранении данных в МС',
                 'status'    => false,
                 'code'      => $e->getCode(),
-                'errors'    => json_decode($e->getResponse()->getBody()->getContents(), true),
+                'message'    => json_decode($e->getResponse()->getBody()->getContents(), true),
                 'postTicket'    => $postTicket,
             ]);
         }
@@ -99,7 +99,7 @@ class integrationTicketService
                 'info'    => 'При создании документов',
                 'status'    => false,
                 'code'      => $e->getCode(),
-                'errors'    => json_decode($e->getResponse()->getBody()->getContents(), true),
+                'message'    => json_decode($e->getResponse()->getBody()->getContents(), true),
                 'postTicket'    => $postTicket,
             ]);
         }

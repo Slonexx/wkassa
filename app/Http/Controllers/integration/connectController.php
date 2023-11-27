@@ -63,13 +63,7 @@ class connectController extends Controller
 
     public function getUrlTicket( $accountId, $ms_token, $kassa_token, $entity_type, $object): Factory|\Illuminate\Contracts\View\View|Application
     {
-
-
-
-
         $ClientMS = new MsClient($ms_token);
-
-
 
         if ($accountId == '1dd5bd55-d141-11ec-0a80-055600047495') $ClientKassa = new testKassClient($kassa_token);
         else $ClientKassa = new integrationKassClient($kassa_token);
@@ -89,6 +83,14 @@ class connectController extends Controller
                 'Message' => "Отсутствует информация о дополнительном поле kkm_id, просьба сообщать разработчиком",
                 'PrintFormat' => [],
             ]);
+
+            if (property_exists($Body, 'Errors')) {
+                return view('popup.Print', [
+                    'StatusCode' => 500,
+                    'Message' => $Body->Errors,
+                    'PrintFormat' => [],
+                ]);
+            }
 
             return view('popup.Print', [
                 'StatusCode' => 200,
