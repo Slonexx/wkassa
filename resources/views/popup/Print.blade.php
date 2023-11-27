@@ -128,7 +128,7 @@
             window.print()
         }
     } else {
-        alert('{{$Message}}');
+        alert(JSON.stringify({{$Message}}));
     }
 
 
