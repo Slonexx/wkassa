@@ -116,7 +116,6 @@ class testKassClient
 
 
     public function TicketPrint($ExternalCheckNumber, $serial_number){
-
         $res = $this->client->post($this->URL_WEBKASSA['dev_webkassa'].'api/Ticket/PrintFormat',[
             'body' => json_encode(
                 [

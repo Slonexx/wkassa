@@ -61,7 +61,7 @@ class connectController extends Controller
     }
 
 
-    public function getUrlTicket( $accountId, $ms_token, $kassa_token, $entity_type, $object): Factory|\Illuminate\Contracts\View\View|Application
+    public function getUrlTicket( $accountId, $ms_token, $kassa_token, $serial_number, $entity_type, $object): Factory|\Illuminate\Contracts\View\View|Application
     {
         $ClientMS = new MsClient($ms_token);
 
@@ -77,7 +77,7 @@ class connectController extends Controller
                     $ExternalCheckNumber = $item->value;
                 } else continue;
             }
-            if ($ExternalCheckNumber != null) $Body = $ClientKassa->TicketPrint($ExternalCheckNumber, $kassa_token);
+            if ($ExternalCheckNumber != null) $Body = $ClientKassa->TicketPrint($ExternalCheckNumber, $serial_number);
             else  return view('popup.Print', [
                 'StatusCode' => 500,
                 'Message' => "Отсутствует информация о дополнительном поле kkm_id, просьба сообщать разработчиком",
