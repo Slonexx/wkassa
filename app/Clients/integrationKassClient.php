@@ -9,7 +9,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 
-class testKassClient
+class integrationKassClient
 {
     private Client $client;
     private mixed $URL_WEBKASSA;
@@ -22,18 +22,11 @@ class testKassClient
         $this->authtoken = $authtoken;
 
         $this->client = new Client([
-            'base_uri' => $this->URL_WEBKASSA['dev_webkassa'].'api/',
+            'base_uri' => $this->URL_WEBKASSA['webkassa'].'api/',
             'headers' => [
-                'x-api-key' => $this->URL_WEBKASSA['dev_token_webkassa'],
+                'x-api-key' => $this->URL_WEBKASSA['token_webkassa'],
                 'Content-Type' => 'application/json',
             ]
-        ]);
-    }
-
-    public function testCheck($body): \Psr\Http\Message\ResponseInterface
-    {
-        return $this->client->post($this->URL_WEBKASSA['dev_webkassa'].'api/Check',[
-            'body' => json_encode($body),
         ]);
     }
 
@@ -42,8 +35,8 @@ class testKassClient
     {
         try {
             $result = [];
-            $body = [ 'body' => json_encode(['Token'=> $this->authtoken]) ];
-            $tmp = json_decode($this->client->post($this->URL_WEBKASSA['dev_webkassa'].'api/CashBoxes', $body)->getBody()->getContents());
+            $body = [ 'body' => json_encode(['Token'=>  $this->authtoken]) ];
+            $tmp = json_decode($this->client->post($this->URL_WEBKASSA['webkassa'].'api/CashBoxes', $body)->getBody()->getContents());
             if (property_exists($tmp, 'Data')) foreach ($tmp->Data->List as $item){ $result[] = $item; }
             else { return []; }
 
@@ -70,7 +63,7 @@ class testKassClient
 
         //dd($body, json_encode($body));
 
-        $res = $this->client->post($this->URL_WEBKASSA['dev_webkassa'].'api/MoneyOperation',[
+        $res = $this->client->post($this->URL_WEBKASSA['webkassa'].'api/MoneyOperation',[
             'body' => json_encode($body),
         ]);
 
@@ -83,7 +76,7 @@ class testKassClient
             "token" => $this->authtoken,
             "CashboxUniqueNumber" => $serial_number,
         ];
-        $res = $this->client->post($this->URL_WEBKASSA['dev_webkassa'].'api/XReport',[
+        $res = $this->client->post($this->URL_WEBKASSA['webkassa'].'api/XReport',[
             'body' => json_encode($body),
         ]);
 
@@ -95,7 +88,7 @@ class testKassClient
             "token" =>  $this->authtoken,
             "CashboxUniqueNumber" => $serial_number,
         ];
-        $res = $this->client->post($this->URL_WEBKASSA['dev_webkassa'].'api/ZReport',[
+        $res = $this->client->post($this->URL_WEBKASSA['webkassa'].'api/ZReport',[
             'body' => json_encode($body),
         ]);
 
@@ -107,7 +100,7 @@ class testKassClient
         $body["token"] =  $this->authtoken;
         $body["CashboxUniqueNumber"] = $serial_number;
 
-        $res = $this->client->post($this->URL_WEBKASSA['dev_webkassa'].'api/Check',[
+        $res = $this->client->post($this->URL_WEBKASSA['webkassa'].'api/Check',[
             'body' => json_encode($body),
         ]);
 
@@ -117,7 +110,7 @@ class testKassClient
 
     public function TicketPrint($ExternalCheckNumber, $serial_number){
 
-        $res = $this->client->post($this->URL_WEBKASSA['dev_webkassa'].'api/Ticket/PrintFormat',[
+        $res = $this->client->post($this->URL_WEBKASSA['webkassa'].'api/Ticket/PrintFormat',[
             'body' => json_encode(
                 [
                     "token" => $this->authtoken,
@@ -142,7 +135,7 @@ class testKassClient
                 "Skip" => $skip,
                 "Take" => $Take,
             ];
-            $res = $this->client->post($this->URL_WEBKASSA['dev_webkassa'].'api/Cashbox/ShiftHistory',[
+            $res = $this->client->post($this->URL_WEBKASSA['webkassa'].'api/Cashbox/ShiftHistory',[
                 'body' => json_encode($body),
             ]);
         } catch (BadResponseException $e){
