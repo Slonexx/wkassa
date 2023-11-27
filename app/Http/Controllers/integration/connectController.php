@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\integration;
 
-use App\Clients\KassClient;
+
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\globalObjectController;
-use App\Services\AdditionalServices\AttributeService;
+use App\Services\ticket\integrationTicketService;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Http\JsonResponse;
@@ -25,8 +24,8 @@ class connectController extends Controller
         try {
             $post = $client->post($url, [
                 'form_params' => [
-                    'login' => $request->email,
-                    'password' => $request->password,
+                    'login' => $request->email ?? '',
+                    'password' => $request->password ?? '',
                 ],
             ]);
 
@@ -56,5 +55,8 @@ class connectController extends Controller
         return response()->json($result);
     }
 
-
+    public function sendTicket(Request $request): JsonResponse
+    {
+        return (new integrationTicketService())->createTicket(json_decode(json_encode($request->all())));
+    }
 }

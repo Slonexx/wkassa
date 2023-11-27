@@ -9,8 +9,10 @@ use App\Clients\testKassClient;
 use App\Http\Controllers\BD\getMainSettingBD;
 use App\Http\Controllers\Controller;
 use App\Services\AdditionalServices\AttributeService;
+use App\Services\ticket\integrationTicketService;
 use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 
@@ -66,6 +68,11 @@ class connectController extends Controller
 
 
 
+    }
+
+    public function sendTicket(Request $request): JsonResponse
+    {
+        return (new integrationTicketService())->createTicket(json_decode(json_encode($request->all())));
     }
 
 }
