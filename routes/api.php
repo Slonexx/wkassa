@@ -13,6 +13,6 @@ Route::post('/webhook/salesreturn/',[WebhookMSController::class, 'customerorder'
 
 Route::group(["prefix" => "integration"], function () {
     Route::get('client/connect/{accountId}', [connectController::class, 'connectClient']);
-    Route::post('client/get/ticket/', [connectController::class, 'getUrlTicket']);
+    Route::post('client/get/ticket/{accountId}/{ms_token}/{kassa_token}/{entity_type}/{object}', [connectController::class, 'getUrlTicket']);
     Route::post('client/send/ticket/', [connectController::class, 'sendTicket']);
 });
