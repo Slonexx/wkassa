@@ -316,20 +316,8 @@ class integrationTicketService
 
     private function putBodyMS($entity_type, mixed $Body, mixed $postTicket, mixed $oldBody, mixed $positionsBody): array
     {   $result = null;
-        $check_attributes_in_value_name = false;
+        $Result_attributes = $this->setAttributesToPutBody($Body, $postTicket, $entity_type);
 
-        $attributes =  $this->msClient->get('https://api.moysklad.ru/api/remap/1.2/entity/'.$entity_type.'/metadata/attributes/')->rows;
-        //$positions =  $this->msClient->get($oldBody->positions->meta->href)->rows;
-        if (property_exists($oldBody, 'attributes')) {
-            foreach ($oldBody->attributes as $item){
-                if ($item->name == 'Фискальный номер (Учёт.Касса)' and $item->name != ''){
-                    $check_attributes_in_value_name = false;
-                    break;
-                } else $check_attributes_in_value_name = true;
-            }
-        } else $check_attributes_in_value_name = true;
-
-        $Result_attributes = $this->setAttributesToPutBody($Body, $postTicket, $check_attributes_in_value_name, $attributes);
         if ($this->data->accountId == '686ca08f-eb47-11e8-9109-f8fc00009aa4'){ } else {
             $result['description'] = $this->descriptionToCreate($oldBody, $postTicket, 'Продажа, Фискальный номер: ');
         }
@@ -341,52 +329,49 @@ class integrationTicketService
         return $result;
     }
 
-    private function setAttributesToPutBody(mixed $Body, mixed $postTicket, bool $check_attributes, $attributes): array
+    private function setAttributesToPutBody(mixed $Body, mixed $postTicket, string $entityType): array
     {
-        $Result_attributes = null;
-        foreach ($attributes as $item) {
-            if ($item->name == "фискальный номер (WebKassa)" and $check_attributes) {
-                $Result_attributes[] = [
-                    "meta"=> [
-                        "href"=> $item->meta->href,
-                        "type"=> $item->meta->type,
-                        "mediaType"=> $item->meta->mediaType,
-                    ],
-                    "value" => $postTicket->Data->CheckNumber,
-                ];
-            }
-            if ($item->name == "Ссылка для QR-кода (WebKassa)" ) {
-                $Result_attributes[] = [
-                    "meta"=> [
-                        "href"=> $item->meta->href,
-                        "type"=> $item->meta->type,
-                        "mediaType"=> $item->meta->mediaType,
-                    ],
-                    "value" => $postTicket->Data->TicketUrl,
-                ];
-            }
-            if ($item->name == "Фискализация (WebKassa)" ) {
-                $Result_attributes[] = [
-                    "meta"=> [
-                        "href"=> $item->meta->href,
-                        "type"=> $item->meta->type,
-                        "mediaType"=> $item->meta->mediaType,
-                    ],
-                    "value" => true,
-                ];
-            }
-            if ($item->name == "ID (WebKassa)" ) {
-                $Result_attributes[] = [
-                    "meta"=> [
-                        "href"=> $item->meta->href,
-                        "type"=> $item->meta->type,
-                        "mediaType"=> $item->meta->mediaType,
-                    ],
-                    "value" => (string) $Body['ExternalCheckNumber'],
-                ];
+        $body = null;
+        $meta = $this->getMeta($entityType);
+
+        if ($meta['fiscal_number'] != null) $body["attributes"][] = ["meta" => $meta['fiscal_number'], "value" => "" . $postTicket->Data->CheckNumber,];
+        if ($meta['link_to_check'] != null) $body["attributes"][] = ["meta" => $meta['link_to_check'], "value" => $postTicket->Data->TicketUrl,];
+        if ($meta['fiscalization'] != null) $body["attributes"][] = ["meta" => $meta['fiscalization'], "value" => true];
+        if ($meta['kkm_ID'] != null) $body["attributes"][] = ["meta" => $meta['kkm_ID'], "value" => (string) $Body['ExternalCheckNumber']];
+
+
+        return  $body["attributes"] ;
+    }
+
+    private function getMeta($entityType): array
+    {
+
+        $url = match ($entityType) {
+            "demand" => "https://api.moysklad.ru/api/remap/1.2/entity/demand/metadata/attributes",
+            "salesreturn" => "https://api.moysklad.ru/api/remap/1.2/entity/salesreturn/metadata/attributes",
+            default => "https://api.moysklad.ru/api/remap/1.2/entity/customerorder/metadata/attributes",
+        };
+
+        $json = $this->msClient->get($url);
+        $meta = null;
+        foreach ($json->rows as $row) {
+            if ($row->name == "фискальный номер") {
+                $meta['fiscal_number'] = $row->meta;
+            } elseif ($row->name == "Ссылка на чек") {
+                $meta['link_to_check'] = $row->meta;
+            } elseif ($row->name == "Фискализация") {
+                $meta['fiscalization'] = $row->meta;
+            } elseif ($row->name == "kkm_ID") {
+                $meta['kkm_ID'] = $row->meta;
             }
         }
-        return $Result_attributes;
+
+        return [
+            'fiscal_number' => $meta['fiscal_number'] ?? '',
+            'link_to_check' => $meta['link_to_check'] ?? '',
+            'fiscalization' => $meta['fiscalization'] ?? '',
+            'kkm_ID' => $meta['kkm_ID'] ?? '',
+        ];
     }
 
     private function setPositionsToPutBody(mixed $positions, mixed $positionsBody): array
@@ -658,7 +643,7 @@ class integrationTicketService
             $attributes = null;
             $positions = null;
             foreach ($attributes_item as $item){
-                if ($item->name == 'фискальный номер (WebKassa)'){
+                if ($item->name == 'фискальный номер'){
                     $attributes[] = [
                         'meta' => [
                             'href' => $item->meta->href,
@@ -668,7 +653,7 @@ class integrationTicketService
                         'value' => $putBody->Data->CheckNumber,
                     ];
                 }
-                if ($item->name == 'Ссылка для QR-кода (WebKassa)'){
+                if ($item->name == 'Ссылка на чек'){
                     $attributes[] = [
                         'meta' => [
                             'href' => $item->meta->href,
@@ -678,7 +663,7 @@ class integrationTicketService
                         'value' => $putBody->Data->TicketUrl,
                     ];
                 }
-                if ($item->name == 'Фискализация (WebKassa)'){
+                if ($item->name == 'Фискализация'){
                     $attributes[] = [
                         'meta' => [
                             'href' => $item->meta->href,
