@@ -128,7 +128,8 @@
             window.print()
         }
     } else {
-        alert(JSON.stringify({{$Message}}));
+        let message = @json($Message);
+        alert(JSON.stringify(message));
     }
 
 
