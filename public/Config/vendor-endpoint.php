@@ -3,12 +3,11 @@
 require_once 'lib.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
-$path = $_SERVER['PATH_INFO'];
+$queryString = $_SERVER['QUERY_STRING'];
 
-$pp = explode('/', $path);
-$n = count($pp);
-$appId = $pp[$n - 2];
-$accountId = $pp[$n - 1];
+parse_str($queryString, $params);
+$appId = "672c9f92-0f5c-4eef-8ec1-1ea737be7515"; // Замените 'appId' на ваш параметр
+$accountId = $params['accountId'] ?? null; // Замените 'accountId' на ваш параметр
 
 
 $app = AppInstanceContoller::load($appId, $accountId);
