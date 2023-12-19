@@ -3,6 +3,7 @@
 use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\Config\collectionOfPersonalController;
 use App\Http\Controllers\Config\DeleteVendorApiController;
+use App\Http\Controllers\Config\vendorEndpoint;
 use App\Http\Controllers\Entity\PopapController;
 use App\Http\Controllers\Entity\PrintController;
 use App\Http\Controllers\Entity\widgetController;
@@ -20,6 +21,9 @@ use Illuminate\Support\Facades\Route;
 //main windows
 Route::get('/', [indexController::class, 'initialization']);
 Route::get('/{accountId}/', [indexController::class, 'index'])->name('main');
+
+Route::put('/Config/vendor-endpoint.php', [vendorEndpoint::class, 'put']);
+Route::delete('/Config/vendor-endpoint.php', [vendorEndpoint::class, 'delete']);
 
 Route::get('/search/employee/byName/{login}', [indexController::class, 'searchEmployeeByID']);
 
