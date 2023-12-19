@@ -6,6 +6,7 @@ use App\Clients\KassClient;
 use App\Clients\MsClient;
 use App\Http\Controllers\BD\getMainSettingBD;
 use GuzzleHttp\Exception\BadResponseException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 
 class TicketService
@@ -15,7 +16,7 @@ class TicketService
     private getMainSettingBD $Setting;
 
 
-    public function createTicket($data): \Illuminate\Http\JsonResponse
+    public function createTicket($data): JsonResponse
     {
         $accountId = $data['accountId'];
         $id_entity = $data['id_entity'];
@@ -321,7 +322,7 @@ class TicketService
         $check_attributes_in_value_name = false;
 
         $attributes =  $this->msClient->get('https://api.moysklad.ru/api/remap/1.2/entity/'.$entity_type.'/metadata/attributes/')->rows;
-        //$positions =  $this->msClient->get($oldBody->positions->meta->href)->rows;
+        $positions =  $this->msClient->get($oldBody->positions->meta->href)->rows;
         if (property_exists($oldBody, 'attributes')) {
             foreach ($oldBody->attributes as $item){
                 if ($item->name == 'Фискальный номер (Учёт.Касса)' and $item->name != ''){
@@ -335,10 +336,10 @@ class TicketService
         if ($this->Setting->accountId == '686ca08f-eb47-11e8-9109-f8fc00009aa4'){ } else {
             $result['description'] = $this->descriptionToCreate($oldBody, $postTicket, 'Продажа, Фискальный номер: ');
         }
-        //$Resul_positions = $this->setPositionsToPutBody($positions, $positionsBody);
+        $Resul_positions = $this->setPositionsToPutBody($positions, $positionsBody);
 
         if ($Result_attributes != null){ $result['attributes'] = $Result_attributes; }
-        //if ($Resul_positions != null){ $result['positions'] = $Resul_positions; }
+        if ($Resul_positions != null){ $result['positions'] = $Resul_positions; }
 
         return $result;
     }
@@ -790,6 +791,5 @@ class TicketService
 
         return $OldMessage.'['.( (int) date('H') + 6 ).date(':i:s').' '. date('Y-m-d') .'] '. $message.$postTicket->Data->CheckNumber ;
     }
-
 
 }
