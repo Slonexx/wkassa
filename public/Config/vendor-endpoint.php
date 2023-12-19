@@ -3,11 +3,12 @@
 require_once 'lib.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
-$queryString = $_SERVER['QUERY_STRING'];
+$path = $_SERVER['REQUEST_URI'];
 
-parse_str($queryString, $params);
-$appId = "672c9f92-0f5c-4eef-8ec1-1ea737be7515"; // Замените 'appId' на ваш параметр
-$accountId = $params['accountId'] ?? null; // Замените 'accountId' на ваш параметр
+$pp = explode('/', $path);
+$n = count($pp);
+$appId = $pp[$n - 2];
+$accountId = $pp[$n - 1];
 
 
 $app = AppInstanceContoller::load($appId, $accountId);
@@ -19,7 +20,6 @@ switch ($method) {
 
         $data = json_decode($requestBody);
 
-        $appUid = $data->appUid;
         $accessToken = $data->access[0]->access_token;
 
         if (!$app->getStatusName()) {
