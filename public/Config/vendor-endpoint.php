@@ -43,7 +43,7 @@ switch ($method) {
 }
 
 if (!$app->getStatusName()) {
-    http_response_code(4040);
+    http_response_code(200);
 } else if ($replyStatus) {
     header("Content-Type: application/json");
     echo '{"status": "' . $app->getStatusName() . '"}';
