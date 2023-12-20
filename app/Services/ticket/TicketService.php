@@ -407,7 +407,7 @@ class TicketService
                 "id" => $item->id,
                 "quantity" => (int) $item->quantity,
                 "price" => (float) $item->price * 100,
-                "discount" => $item->discount,
+                "discount" => (int) $item->discount,
                 "vat" => (int) $item->is_nds,
                 "assortment" => ['meta'=>[
                     "href" => $sort[$id]->assortment->meta->href,
