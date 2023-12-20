@@ -405,7 +405,7 @@ class TicketService
         foreach ($positionsBody as $id=>$item){
             $result[$id] = [
                 "id" => $item->id,
-                "quantity" => $item->quantity,
+                "quantity" => (int) $item->quantity,
                 "price" => (float) $item->price * 100,
                 "discount" => $item->discount,
                 "vat" => (int) $item->is_nds,

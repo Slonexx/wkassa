@@ -326,9 +326,9 @@
                                 window.document.getElementById(button_hide).style.display = "block";
                                 if (json.hasOwnProperty('errors')){
                                     if (json.errors === "Срок действия сессии истек") window.document.getElementById('messageAlert').innerText = "Токен приложение недействителен, пожалуйста пройдите настройку заново"
-                                    else window.document.getElementById('messageAlert').innerText = json.errors
+                                    else window.document.getElementById('messageAlert').innerText = JSON.stringify(json.errors)
                                 }
-                                else window.document.getElementById('messageAlert').innerText = "Ошибка: " + json
+                                else window.document.getElementById('messageAlert').innerText = JSON.stringify("Ошибка: " + json)
 
                                 modalShowHide = 'hide';
                             }
