@@ -118,12 +118,19 @@ class CreateAuthTokenController extends Controller
         $URL_WEBKASSA = Config::get("Global");
         $url = $URL_WEBKASSA['webkassa'].'api/Authorize';
 
-        $client = new Client();
+        $xapikey = $URL_WEBKASSA['token_webkassa'];
+
+        $client = new Client([
+            'headers' => [
+                'x-api-key' => $xapikey,
+                'Content-Type' => 'application/json',
+            ]
+        ]);
         try {
             $post = $client->post($url, [
-                'form_params' => [
-                    'login' => $request->email,
-                    'password' => $request->password,
+                'json' => [
+                    'login' => $request->email ?? '',
+                    'password' => $request->password ?? '',
                 ],
             ]);
             $result = [
