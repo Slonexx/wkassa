@@ -22,13 +22,24 @@ class connectController extends Controller
     {
 
         $URL_WEBKASSA = Config::get("Global");
-        if ($accountId == '1dd5bd55-d141-11ec-0a80-055600047495') $url = $URL_WEBKASSA['dev_webkassa'].'api/Authorize';
-        else $url = $URL_WEBKASSA['webkassa'].'api/Authorize';
+        if ($accountId == '1dd5bd55-d141-11ec-0a80-055600047495') {
+            $url = $URL_WEBKASSA['dev_webkassa'].'api/Authorize';
+            $xapikey = $URL_WEBKASSA['dev_token_webkassa'];
+        }
+        else {
+            $xapikey = $URL_WEBKASSA['token_webkassa'];
+            $url = $URL_WEBKASSA['webkassa'].'api/Authorize';
+        }
 
-        $client = new Client();
+        $client = new Client([
+            'headers' => [
+                'x-api-key' => $xapikey,
+                'Content-Type' => 'application/json',
+            ]
+        ]);
         try {
             $post = $client->post($url, [
-                'form_params' => [
+                'json' => [
                     'login' => $request->email ?? '',
                     'password' => $request->password ?? '',
                 ],
