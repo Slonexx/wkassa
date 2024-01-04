@@ -121,6 +121,30 @@ class AttributeService
                 "required" => false,
             ]
         );
+        $client->post("https://api.moysklad.ru/api/remap/1.2/entity/demand/metadata/attributes",
+            [
+                "customEntityMeta" => [
+                    "href" => 'https://api.moysklad.ru/api/remap/1.2/context/companysettings/metadata/customEntities/'. $json->id,
+                    "type" => "customentitymetadata",
+                    "mediaType" => "application/json",
+                ],
+                "name" => "Тип оплаты (Онлайн ККМ)",
+                "type" => "customentity",
+                "required" => false,
+            ]
+        );
+        $client->post("https://api.moysklad.ru/api/remap/1.2/entity/salesreturn/metadata/attributes",
+            [
+                "customEntityMeta" => [
+                    "href" => 'https://api.moysklad.ru/api/remap/1.2/context/companysettings/metadata/customEntities/'. $json->id,
+                    "type" => "customentitymetadata",
+                    "mediaType" => "application/json",
+                ],
+                "name" => "Тип оплаты (Онлайн ККМ)",
+                "type" => "customentity",
+                "required" => false,
+            ]
+        );
 
     }
 
