@@ -19,8 +19,8 @@ switch ($method) {
         $requestBody = file_get_contents('php://input');
 
         $data = json_decode($requestBody);
-
-        $accessToken = $data->access[0]->access_token;
+        if (property_exists($data, 'access')) $accessToken = $data->access[0]->access_token;
+        else $accessToken = $app->TokenMoySklad;
 
         if (!$app->getStatusName()) {
             $app->TokenMoySklad = $accessToken;
