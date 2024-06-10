@@ -41,7 +41,7 @@
         let entity_type = "{{$entity}}"
 
 
-        function getSearchToTIS(){ window.open('{{Config::get("Global")['webkassa']}}'+"spa-ui/reports/tickets-history") }
+        function getSearchToTIS(){ window.open("https://my.webkassa.kz/spa-ui/reports/tickets-history") }
 
         function CloseChangeWebKassa(){
             window.document.getElementById('CloseChangeWebKassa').style.display = 'none'
