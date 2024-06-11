@@ -83,7 +83,7 @@ class widgetController extends Controller
 
         try {
             $ClientWeb = new KassClient($accountId);
-            $Total = $ClientWeb->ShiftHistory(0, 50)->Data->Total;
+            $Total = $ClientWeb->ShiftHistory(0, 50);
             if (property_exists($Total, 'Data')){
                 $Total = $Total->Data->Total;
             } elseif (property_exists($Total, "Errors")) {
