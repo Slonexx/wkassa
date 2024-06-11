@@ -116,23 +116,30 @@
                 let TIS_search = window.document.getElementById('TIS_search')
                 window.document.getElementById('CloseChangeWebKassa').style.display = 'block'
 
-                if (response.ticket_id == null){
-                    btnF.innerText = 'Фискализация';
-                    window.document.getElementById('messageGoodAlert').style.display = 'none'
-                    window.document.getElementById("messageGoodAlert").innerText = ""
-                    TIS_search.style.display = 'none'
+                if (response.status) {
+                    if (response.ticket_id == null){
+                        btnF.innerText = 'Фискализация';
+                        window.document.getElementById('messageGoodAlert').style.display = 'none'
+                        window.document.getElementById("messageGoodAlert").innerText = ""
+                        TIS_search.style.display = 'none'
+                    } else {
+                        btnF.innerText = 'Действие с чеком';
+                        window.document.getElementById('messageGoodAlert').style.display = 'block'
+                        window.document.getElementById("messageGoodAlert").innerText = "Чек уже создан. Фискальный номер:  " + response.ticket_id
+                        TIS_search.style.display = 'block'
+                    }
+
+                    if (response.Close === true){
+                        window.document.getElementById('CloseChangeWebKassa').style.display = 'none'
+                    } else {
+                        window.document.getElementById('CloseChangeWebKassa').style.display = 'block'
+                    }
                 } else {
-                    btnF.innerText = 'Действие с чеком';
-                    window.document.getElementById('messageGoodAlert').style.display = 'block'
-                    window.document.getElementById("messageGoodAlert").innerText = "Чек уже создан. Фискальный номер:  " + response.ticket_id
-                    TIS_search.style.display = 'block'
+                    window.document.getElementById('messageErrorAlert').style.display = 'block'
+                    window.document.getElementById("messageErrorAlert").innerText = JSON.stringify(response.message)
                 }
 
-                if (response.Close === true){
-                    window.document.getElementById('CloseChangeWebKassa').style.display = 'none'
-                } else {
-                    window.document.getElementById('CloseChangeWebKassa').style.display = 'block'
-                }
+
 
             });
         }
