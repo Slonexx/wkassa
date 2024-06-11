@@ -84,6 +84,18 @@ class widgetController extends Controller
         try {
             $ClientWeb = new KassClient($accountId);
             $Total = $ClientWeb->ShiftHistory(0, 50)->Data->Total;
+            if (property_exists($Total, 'Data')){
+                $Total = $Total->Data->Total;
+            } elseif (property_exists($Total, "Errors")) {
+                return view( 'widget.Error', [
+                    'status' => false,
+                    'code' => 400,
+                    'message' => $Total->Errors[0]->Text]
+                );
+            } else return view( 'widget.Error', [
+                    'status' => false,
+                    'code' => 400,
+                    'message' => 'Не распознай ошибка']);
             sleep(1);
             $json = $ClientWeb->ShiftHistory($Total-1, 50)->Data->Shifts[0];
 
