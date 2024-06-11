@@ -87,15 +87,9 @@ class widgetController extends Controller
             if (property_exists($Total, 'Data')){
                 $Total = $Total->Data->Total;
             } elseif (property_exists($Total, "Errors")) {
-                return view( 'widget.Error', [
-                    'status' => false,
-                    'code' => 400,
-                    'message' => $Total->Errors[0]->Text]
-                );
-            } else return view( 'widget.Error', [
-                    'status' => false,
-                    'code' => 400,
-                    'message' => 'Не распознай ошибка']);
+                return response()->json(['status'=>false, 'message' => $Total->Errors[0]->Text]);
+            } else
+                return response()->json(['status'=>false, 'message' => print_r($Total, true)]);
             sleep(1);
             $json = $ClientWeb->ShiftHistory($Total-1, 50)->Data->Shifts[0];
 
@@ -104,11 +98,7 @@ class widgetController extends Controller
             } else $Close = false;
 
         } catch (BadResponseException $e){
-            return view( 'widget.Error', [
-                'status' => false,
-                'code' => 400,
-                'message' => json_decode($e->getResponse()->getBody()->getContents())->message,
-            ] );
+            return response()->json(['status'=>false, 'message' => json_decode($e->getResponse()->getBody()->getContents())->message]);
         }
 
         if (property_exists($body, 'attributes')){
@@ -119,7 +109,7 @@ class widgetController extends Controller
                 }
             }
         }
-        return response()->json(['ticket_id' => $ticket_id, 'Close' => $Close]);
+        return response()->json(['status'=>true,'ticket_id' => $ticket_id, 'Close' => $Close]);
     }
 
 
