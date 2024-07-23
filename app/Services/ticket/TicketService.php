@@ -628,7 +628,7 @@ class TicketService
                             'type' => $OldBody->agent->meta->type,
                             'mediaType' => $OldBody->agent->meta->mediaType,
                         ] ],
-                        'sum' => ($item['total']-$change) * 100,
+                        'sum' =>  ($item['Sum']-$change) * 100,
                         'operations' => [
                             0 => [
                                 'meta'=> [
@@ -638,7 +638,7 @@ class TicketService
                                     'mediaType' => $OldBody->meta->mediaType,
                                     'uuidHref' => $OldBody->meta->uuidHref,
                                 ],
-                                'linkedSum' => 0
+                                'linkedSum' => ($item['Sum']-$change) * 100,
                             ], ],
                         'rate' => $rate
                     ];
