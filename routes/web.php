@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 //main windows
 Route::get('/', [indexController::class, 'initialization']);
 Route::get('/{accountId}/', [indexController::class, 'index'])->name('main');
+Route::get('/check/check/check', [indexController::class, 'check2']);
 
 /*Route::put('/Config/vendor-endpoint.php', [vendorEndpoint::class, 'put']);
 Route::delete('/Config/vendor-endpoint.php', [vendorEndpoint::class, 'delete']);*/

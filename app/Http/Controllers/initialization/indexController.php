@@ -6,6 +6,7 @@ use App\Clients\MsClient;
 use App\Http\Controllers\BD\getPersonal;
 use App\Http\Controllers\Config\Lib\VendorApiController;
 use App\Http\Controllers\Controller;
+use App\Models\settingModel;
 use App\Services\Settings\SettingsService;
 use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Http\Request;
@@ -66,6 +67,40 @@ class indexController extends Controller
             }
 
         }
+    }
+    public function check2()
+    {
+        $allSettings = app(SettingsService::class)->getSettings();
+
+        $content = [];
+        $VALUES_main = '';
+        $VALUES_kassa = '';
+
+        foreach ($allSettings as $setting) {
+            $data = [];
+            try {
+                $ClientCheckMC = new MsClient($setting->TokenMoySklad);
+                $body = $ClientCheckMC->get('https://api.moysklad.ru/api/remap/1.2/entity/employee?filter=uid~admin')->rows;
+                if (count($body) > 0) {
+                    $body = $body[0];
+
+                    $kassa = settingModel::find($body->accountId);
+
+
+                    $VALUES_main = $VALUES_main . "('" . $body->accountId . "', '" . $setting->TokenMoySklad . "', '" . $body->uid . "', '1', '0', '2024-07-04 12:00:00', '2024-07-11 07:00:00'), " ;
+                    $VALUES_kassa = $VALUES_kassa . "(NULL, ' Касса 1', '" . $kassa->CashboxUniqueNumber . "', 'NULL', NULL, " . $kassa->authtoken .", '1', '1', '" . $body->accountId . "', '2024-07-09 12:10:00', '2024-07-09 12:11:00'), ";
+                }
+            } catch (BadResponseException $e) {
+                continue;
+            }
+        }
+
+
+        return response()->json([
+                "INSERT INTO `main_settings` (`accountId`, `ms_token`, `UID_ms`, `tariff_id`, `is_active`, `created_at`, `updated_at`) VALUES ". $VALUES_main,
+                "INSERT INTO `kassa`(`id`, `name`, `serial_number`, `password`, `email`, `kassa_token`, `count_by_account_id`, `is_active`, `main_settings_id`, `created_at`, `updated_at`) VALUES ". $VALUES_kassa,
+            ]
+        );
     }
 
 }
