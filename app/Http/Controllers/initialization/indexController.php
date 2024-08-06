@@ -84,7 +84,7 @@ class indexController extends Controller
                 if (count($body) > 0) {
                     $body = $body[0];
 
-                    $kassa = settingModel::find($body->accountId);
+                    $kassa = settingModel::where('accountId', $body->accountId)->get()->first();
 
 
                     $VALUES_main = $VALUES_main . "('" . $body->accountId . "', '" . $setting->TokenMoySklad . "', '" . $body->uid . "', '1', '0', '2024-07-04 12:00:00', '2024-07-11 07:00:00'), " ;
