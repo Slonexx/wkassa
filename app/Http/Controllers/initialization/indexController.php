@@ -88,7 +88,7 @@ class indexController extends Controller
                     if (isset($kassa->CashboxUniqueNumber)) {
 
                         $VALUES_main = $VALUES_main . "('" . $body->accountId . "', '" . $setting->TokenMoySklad . "', '" . $body->uid . "', '1', '0', '2024-07-04 12:00:00', '2024-07-11 07:00:00'), " ;
-                        $VALUES_kassa = $VALUES_kassa . "(NULL, ' Касса 1', '" . $kassa->CashboxUniqueNumber . "', 'NULL', NULL, " . $kassa->authtoken .", '1', '1', '" . $body->accountId . "', '2024-07-09 12:10:00', '2024-07-09 12:11:00'), ";
+                        $VALUES_kassa = $VALUES_kassa . "(NULL, ' Касса 1', '" . $kassa->CashboxUniqueNumber . "', NULL, NULL, '" . $kassa->authtoken ."', '1', '1', '" . $body->accountId . "', '2024-07-09 12:10:00', '2024-07-09 12:11:00'), ";
 
                     }
 
